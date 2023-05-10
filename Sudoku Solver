@@ -1,0 +1,65 @@
+class Solution {
+public:
+
+    bool isSafe(int row, int col, vector<vector<char>>& board, char val){
+        int n=board.size();
+        for(int i=0; i<n; i++){
+            //row check
+            if(board[row][i]==val){
+                return false;
+            }
+            //col check
+            if(board[i][col]==val){
+                return false;
+            }
+            //3*3 small matrix check
+            if(board[3*(row/3)+i/3][3*(col/3)+i%3]==val){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool solve(vector<vector<char>>& board){
+        int n=board.size();
+        for(int i=0; i<n;i++){
+            for(int j=0; j<n;j++){
+                //checking for empty cell
+                if(board[i][j]=='.'){
+                    //now each empty cell can be filled with 1 to 9 digits, So lets check them one by one.
+                    for(char val='1'; val<='9';val++){
+                        //checking is the value which we are trying  to put int board[i][j]
+                        //is valid or not according to rule
+                        //here basically we are checking the specified rule
+                        //calling isSafe function
+                        if(isSafe(i, j, board,val)){
+                            board[i][j]=val;
+                            //recursive call
+                            //recursive call to find next solution
+                            bool aageKaSolution=solve(board);
+                            if(aageKaSolution==true){
+                                return true;
+                            }
+                            else{
+                            //backtracking
+                            board[i][j]='.';
+                            }
+
+                        }
+                    }
+                    //if 1 to 9 tak koi bhi solution nhi nikala, current cell pr 
+                    //that means ki piche kahi wrong value put ho gyi hai 
+                    //therefore go back by returning false
+                    return false;
+                }
+                
+            }
+        }
+        return true;
+        
+    }
+
+    void solveSudoku(vector<vector<char>>& board) {
+        solve(board);
+    }
+};
