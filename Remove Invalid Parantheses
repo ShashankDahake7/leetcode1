@@ -1,0 +1,68 @@
+class Solution {
+public:
+    // For storing output
+    vector <string> output; 
+    // To check if string is valid
+    bool isValid(string &s){ 
+        int pair = 0;
+        for(int i=0; i<s.size(); i++){
+            if(s[i] == '('){
+                pair++;
+            }
+            else if(s[i] == ')'){
+                pair--;
+                if(pair < 0)
+                    return false;
+            } 
+        }
+        // Check if string is valid
+        return pair == 0;
+    }
+    void removeHelper(string input, int index, int left, int right){
+        // When removal of extra brackets is done
+        if(left == 0 && right == 0){
+            // Pushing the valid string only
+            if(isValid(input)){
+                output.push_back(input);
+            }
+            return;
+        }
+        for(int i=index; i<input.size(); i++){
+            // For avoiding same valid string 
+            if(i > index && input[i] == input[i-1]) continue;
+            string tmp = input;
+           // Remove brackets based on left and right count
+            if(right == 0 && left > 0 && input[i] == '(') {
+                 tmp.erase(i, 1);
+                 removeHelper(tmp, i, left-1, right);
+            }
+            else if(right > 0 && input[i] == ')') {
+                tmp.erase(i, 1);
+                removeHelper(tmp, i, left, right-1);
+            }
+        }
+    }
+    // Driver Function 
+    vector<string> removeInvalidParentheses(string s) {
+        if(s.size() == 0) return output;
+        // Count '('  &  ')' due to which string is invalid 
+        int left = 0;
+        int right = 0;
+        for(int i=0; i<s.size(); i++){
+            if(s[i] == '('){
+                left++;
+            }
+            else if(s[i] == ')'){
+                if(left > 0){
+                    left--;
+                }
+                else{
+                    right++;
+                }
+            }   
+        }
+        // Helper to remove those extra brackets
+        removeHelper(s, 0, left, right);
+        return output;
+    }
+};
