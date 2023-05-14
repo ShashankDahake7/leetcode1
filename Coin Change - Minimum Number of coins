@@ -1,0 +1,106 @@
+1. Naive Recursive approach (TLE)
+Time complexity: O(2^n)
+Space complexity: Stack Space
+class Solution {
+public:
+    int count(vector<int>&coins, int amount, int n){
+        if(amount==0) return 0;
+        if(n==0 && amount>0) return INT_MAX-1;
+        int res=0;
+        if(amount>=coins[n-1]){
+            int take=1+count(coins, amount-coins[n-1], n);
+            int dontTake=count(coins, amount, n-1);
+            res=min(take, dontTake);
+        }
+        else{
+            res=count(coins, amount, n-1);
+        } 
+        return res;
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        if(amount == 0) return 0;
+        int n=coins.size();
+        int res= count(coins, amount, n);
+        if(res==INT_MAX-1) return -1;
+        else return res;
+    }
+};
+2. Memoization(DP-TLE)
+Time complexity: O(N*amount)
+Space complexity: O(N*amount)+Stack Space
+class Solution {
+public:
+    int count(vector<int>&coins, int amount, int n, vector<vector<int>>&memo){
+        if(amount==0) return 0;
+        if(n==0 && amount>0) return INT_MAX-1;
+        int res=0;
+        if(amount>=coins[n-1]){
+            int take=1+count(coins, amount-coins[n-1], n, memo);
+            int dontTake=count(coins, amount, n-1, memo);
+            res=min(take, dontTake);
+        }
+        else{
+            res=count(coins, amount, n-1, memo);
+        } 
+        return memo[n][amount]=res;
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        if(amount == 0) return 0;
+        if(coins.size()==1 && coins[0]>amount) return -1;
+        int n=coins.size();
+        vector<vector<int>>memo(n+1, vector<int>(amount+1, -1));
+        int res= count(coins, amount, n, memo);
+        if(res==INT_MAX-1) return -1;
+        else return res;
+    }
+};
+3. Tabulation(DP)
+Time complexity: O(N*amount)
+Space complexity: O(N*amount)
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        if(amount == 0) return 0;
+        int n=coins.size();
+        vector<vector<int>>dp(n+1, vector<int>(amount+1, -1));
+        for(int i=0;i<=n;i++){
+            dp[i][0]=0;
+        }
+        for(int i=1;i<=amount;i++){
+            dp[0][i]=INT_MAX-1;
+        }
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=amount;j++){
+                if(j>=coins[i-1]) dp[i][j]=min(1+dp[i][j-coins[i-1]], dp[i-1][j]);
+                else dp[i][j]=dp[i-1][j];
+            }
+        }
+        int res= dp[n][amount];
+        if(res==INT_MAX-1) return -1;
+        else return res;
+    }
+};
+4. Optimized Space (BEST Approach)
+Time complexity: O(N*amount)
+Space complexity: O(amount)
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        if(amount == 0) return 0;
+        int n=coins.size();
+        vector<int>dp(amount+1);
+        dp[0]=0;
+        for(int i=1;i<=amount;i++){
+            dp[i]=INT_MAX-1;
+        }
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=amount;j++){
+                if(j>=coins[i-1]) dp[j]=min(1+dp[j-coins[i-1]], dp[j]);
+                else dp[j]=dp[j];
+            }
+        }
+        int res= dp[amount];
+        if(res==INT_MAX-1) return -1;
+        else return res;
+    }
+};
