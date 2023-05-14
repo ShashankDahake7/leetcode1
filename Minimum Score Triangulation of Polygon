@@ -1,0 +1,84 @@
+// Recursion
+// Intuition
+// In the question it is given that the array values is in clockwise direction it means first element and last element are adjacent
+// Approach
+// take first = i and last = j index as base
+// now we have last - first indexes left for making a triangle let it be k
+// now we have a triangle of i, j, k and other part left from i to k and k to j
+// so call recursively for i and k as base and k and j as base and add it to ijk
+// return the minimum
+
+class Solution {
+public:
+    int solve(vector<int> &vec, int i, int j){
+        if(i+1 == j) return 0;
+
+        int ans = INT_MAX;
+        for(int k = i+1; k < j; k++){
+            ans = min(ans, vec[i]*vec[j]*vec[k] + solve(vec,i,k) + solve(vec,k,j));
+        }
+        return ans;
+    }
+    int minScoreTriangulation(vector<int>& values) {
+        return solve(values,0,values.size()-1);
+    }
+};
+
+// Recursion+Memoization
+// Intuition
+// in above solution there is overlapping subproblems to it can be solved by dynamic programming
+// in above solution 2 parameters are changing so we need a 2d dp
+// Approach top down dp
+// create a 2d dp array of size n+1*n+1 and initialize with -1
+// store ans in dp[i][j] and return
+// after base case check if ans is already stored or not
+// if stored return ans
+// else call recursion
+
+class Solution {
+public:
+    int solve(vector<int> &vec, int i, int j,vector<vector<int>> &dp){
+        if(i+1 == j) return 0;
+
+        if(dp[i][j] != -1) return dp[i][j];
+        int ans = INT_MAX;
+        for(int k = i+1; k < j; k++){
+            ans = min(ans, vec[i]*vec[j]*vec[k] + solve(vec,i,k,dp) + solve(vec,k,j,dp));
+        }
+        dp[i][j] = ans;
+        return dp[i][j];
+    }
+    int minScoreTriangulation(vector<int>& values) {
+        int n = values.size();
+        vector<vector<int>> dp(n+1,vector<int>(n+1,-1));
+        return solve(values,0,n-1,dp);
+    }
+};
+
+// Tabulation
+// Approach BOTTOM UP DP
+// create a 2d dp array of size n*n and initialize with 0
+// analyse base case
+// since it is a bottom up approach so we traverse from n-1 to 0 for first point (i) of base
+// and second point of base we traverse form i+2 to n because i+1 can't equal to j for making a base
+// now from i to j make calculate ans like previous approaches by assuming a third point k
+// return dp[0][n-1]
+
+class Solution {
+public:
+    int minScoreTriangulation(vector<int>& values) {
+        int n = values.size();
+        vector<vector<int>> dp(n,vector<int>(n,0));
+
+        for(int i = n-1; i >= 0; i--){
+            for(int j = i+2; j < n; j++){
+                int ans = INT_MAX;
+                for(int k = i+1; k < j; k++){
+                    ans = min(ans, values[i]*values[j]*values[k] + dp[i][k] + dp[k][j]);
+                }
+                dp[i][j] = ans;
+            }
+        }
+        return dp[0][n-1];
+    }
+};
