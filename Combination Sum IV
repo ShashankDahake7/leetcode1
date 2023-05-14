@@ -1,41 +1,30 @@
-// RECURSION
-class Solution {
-public:
-    int noOfWays(vector<int> &nums, int target, int index, int size)
-    {
-        if(target < 0) return 0;
-        if(target == 0) return 1;     
-        int ways = 0;   //NO. OF WAYS IN WHICH WE CAN FIND THE TARGET.
-        for(int i = 0; i<size; i++)
-        {
-            ways += noOfWays(nums, target - nums[i], i, size);
-        }
-        return ways;
-    }
-    int combinationSum4(vector<int>& nums, int target) {
-        return noOfWays(nums, target, 0, nums.size());
-    }
-};
+// Brute Force
+int combinationSum4(vector<int>& nums, int target) {
+	if(target == 0) return 1;
+	int ans = 0;
+	for(auto& num : nums)
+		// pick an element if it is less than target to be achieved and recurse for remaining amount.
+		if(num <= target) ans += combinationSum4(nums, target - num);
+	return ans;  
+}
 
 // RECURSION + MEMOIZATION 
 class Solution {
 public:
-    int noOfWays(vector<int> &nums, int target, int size, vector<int> &dp)
-    {
-        if(target < 0) return 0; 
-        if(target == 0) return 1;
-        if(dp[target] != -1) return dp[target]; //IF WE ALREADY CALCULATED THE TARGET
-        int ways = 0;   //NO. OF WAYS IN WHICH WE CAN FIND THE TARGET.
-        for(int i = 0; i<size; i++)
-        {
-            ways += noOfWays(nums, target - nums[i], size, dp);
-        }
-        dp[target] = ways;  //BEFORE RETURNING STORE THE WAYS IN THE dp[];
-        return ways;
-    }
-    int combinationSum4(vector<int>& nums, int target) { 
-        vector<int> dp (target+1, -1); //STORE THE NO OF WAYS IN WHICH WE GET ith INDEX SUM;
-        return noOfWays(nums, target, nums.size(), dp);
+    int combinationSum4(vector<int>& nums, int target) {
+	vector<int> dp(target + 1, -1);  // at start, none of the values are computed
+	return helper(nums, target, dp);
+}
+    int helper(vector<int>& nums, int target, vector<int>& dp){
+        if(target == 0) return 1;  // base condition
+        if(dp[target] != -1) return dp[target];  // if already computed for this value
+        // recursive code starts -
+        dp[target] = 0;
+        // check for every element of nums. An element can only be taken if it is less than target.
+        // If an element is chosen, recurse for remaining value.
+        for(auto& num : nums) 
+            if(num <= target) dp[target] += helper(nums, target - num, dp);
+        return dp[target];
     }
 };
 
@@ -43,16 +32,27 @@ public:
 class Solution {
 public:
     int combinationSum4(vector<int>& nums, int target) {
-        vector<int> dp (target+1, 0); //STORE THE NO OF WAYS IN WHICH WE GET ith INDEX SUM;
-        dp[0] = 1;
-        for(int i = 1; i <= target; i++)
-        {
-            for(int j = 0; j < nums.size(); j++)
-            {
-                if(i - nums[j] >= 0) //IF INDEX IS PRESENT i.e. INDEX SHOULD BE GREATER THAN OR EQUAL TO 0.
-                    dp[i] += dp[i - nums[j]];
-            }
-        }
+        vector<uint> dp(target + 1); dp[0] = 1;
+        // start filling the dp array from bottom, i.e curTarget = 1 till target.
+        for (int curTarget = 1; curTarget <= target; curTarget++) 
+            for (auto& num : nums)     // check for all elements from nums
+                if (num <= curTarget)  // an element will only be taken if it is less than target to be achieved
+                    // the optimal answer(no. of combination) of remaining value is added to dp[curTarget]
+                    dp[curTarget] += dp[curTarget - num];   
+        return dp[target];
+    }
+};
+
+// Optimized
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target) {
+        sort(begin(nums), end(nums));
+        vector<uint> dp(target + 1); dp[0] = 1;
+        for (int curTarget = 1; curTarget <= target; curTarget++) 
+            for (auto& num : nums) 
+                if (num <= curTarget)  dp[curTarget] += dp[curTarget - num];
+                else break;
         return dp[target];
     }
 };
