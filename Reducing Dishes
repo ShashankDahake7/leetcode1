@@ -1,0 +1,69 @@
+// Approach
+// The first approach is a brute-force method where we try all possible starting points and calculate the satisfaction of each subarray. This approach is simple and 
+// easy to understand, but it is very slow and inefficient for large input arrays.
+// The second approach is a recursive algorithm that computes the maximum satisfaction by including or excluding each element of the input array. This approach is more
+// efficient than the brute-force method.
+// The third approach uses memoization to optimize the recursive algorithm by caching the results of the computed subproblems. This approach is faster than the second 
+// approach because it avoids recomputing the same subproblems multiple times. It is also easier to implement because we only need to add a memoization table to 
+// store the results of the computed subproblems.
+// Complexity
+// Time complexity: O(N^2), for all approaches.
+// Space complexity:
+// O(1) for iterative approach
+// O(N) for recursion
+// O(N^2) for Memoization
+
+// Brute Force (iterative)
+class Solution {
+public:
+    int maxSatisfaction(vector<int>& satisfaction) {
+        sort(satisfaction.begin(),satisfaction.end());
+        int max_sat=0;
+        int st=0; // to test all starting points
+        while(st<satisfaction.size()){
+            int temp=0;
+            for(int i=st;i<satisfaction.size();++i){
+                temp+=satisfaction[i]*(i-st+1);
+            }
+            max_sat=max(max_sat,temp);
+            ++st;
+        }
+        return max_sat;
+    }
+};
+
+// Recursive
+class Solution {
+public:
+    int helper(vector<int>& sat, int curr){
+        if(curr==sat.size()) return 0; 
+        int coeff=0; // store the results when we include current index
+        for(int i=curr;i<sat.size();++i){
+            coeff+=sat[i]*(i-curr+1);
+        }
+        return max(coeff,helper(sat,curr+1)); // recursion to check for next indexes
+    }
+    int maxSatisfaction(vector<int>& satisfaction) {
+        sort(satisfaction.begin(),satisfaction.end());
+        return helper(satisfaction,0);
+    }
+};
+
+// Memoization
+class Solution {
+public:
+    int helper(vector<int>& sat, vector<vector<int>>& memo, int curr,int t){
+        if(curr==sat.size()) return 0;
+        if(memo[curr][t]!=-1) return memo[curr][t]; // if the value is already computed
+        
+        int excluded = helper(sat,memo,curr+1,t); // when we don't include the current index
+        int included = sat[curr]*t + helper(sat,memo,curr+1,t+1); // when we include the current index
+        return memo[curr][t]=max(included,excluded);
+    }
+    int maxSatisfaction(vector<int>& satisfaction) {
+        sort(satisfaction.begin(),satisfaction.end());
+        int n=satisfaction.size();
+        vector<vector<int>>memo(n+1,vector<int>(n+1,-1));
+        return helper(satisfaction,memo,0,1);
+    }
+};
