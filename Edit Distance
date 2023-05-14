@@ -1,0 +1,137 @@
+// 1. Naive Recursive approach (TLE)
+// Time complexity: O(2^N)
+// Space complexity: Stack Space
+class Solution {
+public:
+    int count(string word1, string word2, int m, int n){
+        if(m==0) return n;
+        if(n==0) return m;
+        if(word1[m-1]==word2[n-1]) return count(word1, word2, m-1, n-1);
+        else{
+            //preform operations on word2
+            int del= count(word1, word2, m, n-1);
+            int insert= count(word1, word2, m-1, n);
+            int replace= count(word1, word2, m-1, n-1);
+            int res=min(del, insert);
+            res=min(res, replace);
+            return 1+res;
+        }
+    }
+    int minDistance(string word1, string word2) {
+        int m=word1.size();
+        int n=word2.size();
+        return count(word1, word2, m, n);
+    }
+};
+
+// 2. Memoization(DP)
+// Time complexity: O(m*n)
+// Space complexity: O(m*n)+Stack Space
+class Solution {
+public:
+    int count(string word1, string word2, int m, int n, vector<vector<int>>&dp){
+        if(m==0) return n;
+        if(n==0) return m;
+        if(dp[m][n]!=-1) return dp[m][n];
+        if(word1[m-1]==word2[n-1]) return count(word1, word2, m-1, n-1, dp);
+        else{
+            //perform operations on word2
+            int del= count(word1, word2, m, n-1, dp);
+            int insert= count(word1, word2, m-1, n, dp);
+            int replace= count(word1, word2, m-1, n-1, dp);
+            int res=min(del, insert);
+            res=min(res, replace);
+            return dp[m][n]= 1+res;
+        }
+    }
+    int minDistance(string word1, string word2) {
+        int m=word1.size();
+        int n=word2.size();
+        vector<vector<int>>dp(m+1, vector<int>(n+1, -1));
+        return count(word1, word2, m, n, dp);
+    }
+};
+
+// 3. Tabulation(DP)
+// Time complexity: O(m*n)
+// Space complexity: O(m*n)
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        int m=word1.size();
+        int n=word2.size();
+        vector<vector<int>>dp(m+1, vector<int>(n+1));
+        for(int i=0;i<=n;i++){
+            dp[0][i]=i;
+        }
+        for(int i=0;i<=m;i++){
+            dp[i][0]=i;
+        }
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(word1[i-1]==word2[j-1]) dp[i][j]=dp[i-1][j-1];
+                else{
+                    dp[i][j]=min(dp[i][j-1], dp[i-1][j]);
+                    dp[i][j]=1+min(dp[i][j], dp[i-1][j-1]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+};
+
+// 4. Optimized Space (Using 2 arrays)
+// Time complexity: O(m*n)
+// Space complexity: O(n)
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        int m=word1.size();
+        int n=word2.size();
+        vector<int>curr(n+1), prev(n+1);
+        for(int i=0;i<=n;i++){
+            prev[i]=i;
+        }
+        for(int i=1;i<=m;i++){
+            curr[0]=i;
+            for(int j=1;j<=n;j++){
+                if(word1[i-1]==word2[j-1]) curr[j]=prev[j-1];
+                else{
+                    curr[j]=min(curr[j-1], prev[j]);
+                    curr[j]=1+min(curr[j], prev[j-1]);
+                }
+            }
+            prev=curr;
+        }
+        return prev[n];
+    }
+};
+
+// 5. Optimized Space (Using only 1 array- BEST Approach)
+// Time complexity: O(m*n)
+// Space complexity: O(n)
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        int m=word1.size();
+        int n=word2.size();
+        vector<int>dp(n+1);
+        for(int i=0;i<=n;i++){
+            dp[i]=i;
+        }
+        for(int i=1;i<=m;i++){
+            int prev=dp[0];
+            dp[0]=i;
+            for(int j=1;j<=n;j++){
+                int curr=dp[j];
+                if(word1[i-1]==word2[j-1]) dp[j]=prev;
+                else{
+                    dp[j]=min(dp[j-1], prev);
+                    dp[j]=1+min(dp[j], curr);
+                }
+                prev=curr;
+            }
+        }
+        return dp[n];
+    }
+};
