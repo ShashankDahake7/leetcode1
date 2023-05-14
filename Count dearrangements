@@ -1,0 +1,71 @@
+/ Brute Force
+// Approach:
+// Consider ‘N’ = 4, the elements will be {0, 1, 2 ,3}.
+
+// The element 0 can be placed at any index except 0 because the element cannot be placed at the original position. So, the number of ways of placing 0 is 3, that is, at positions 1, 2, or 3.
+
+// To place element 1, we need to consider two situations:
+
+// 1) 0 is placed at index 2 or 3 (index other than the index of current element). In this case, the number of ways in which element 1 can be placed is 2, that is, at positions 0 or {2,3} (because 0 will already be placed at position 2 or 3).
+// 2) 0 is placed at position 1. In this case, 0 and 1 have swapped places and hence 1 is already deranged. So, we need not reconsider it.
+// For element 2, we again consider two conditions:
+
+// 1) None among {0,1} have already swapped places with 2, that is, it is still at the original position. In this case, only 1 position is left for 2 to be placed as 2 elements {0,1} have already taken 2 positions and it cannot be placed at the original position.
+// 2.)One among {0,1} when deranged has swapped position with 2. So, no need to reconsider it.
+// If any other position is left for 3 other than index 3, the permutation generated is correct, else we discard it
+
+// Recursive Statement
+// F(n) = (n - 1) * [ F(n - 1) + F(n - 2) ]
+// Recursive Code:
+long int disarrange(int n)
+{
+
+    if (n == 0)
+        return 0;
+    if (n == 1)
+        return 1;
+
+    return (n - 1) * (disarrange(n - 1) + disarrange(n - 2));
+}
+// Time Complexity: T(n) = T(n-1) + T(n-2) which is exponential.
+// We can observe that this implementation does repeat work. For example, see recursion tree for countDer(5), countDer(3) is being evaluated twice.
+// cdr() ==> countDer()
+// cdr(5)
+//  /         \     
+            //  cdr(4)          cdr(3)
+//    /      \         /     \
+    //    cdr(3)     cdr(2)  cdr(2)   cdr(1)
+// Pure Dp (Auxiliary Space: O(N))
+long int disarrange(int n)
+{
+
+    vector<long int> dp(n + 1, 0);
+    dp[1] = 0;
+    dp[2] = 1;
+    for (int i = 3; i <= n; i++)
+    {
+        dp[i] = (i - 1) * (dp[i - 1] + dp[i - 2]);
+    }
+    return dp[n];
+}
+// Most Optimal (Auxiliary Space: O(1)):
+// As we only need to remember only two previous values So, instead of Storing the values in an array two variables can be used to just store the required previous only.
+long int disarrange(int n)
+{
+
+    if (n == 1)
+        return 0;
+    if (n == 2)
+        return 1;
+
+    int a = 0;
+    int b = 1;
+
+    for (int i = 3; i <= n; i++)
+    {
+        long int curr = (i - 1) * (a + b);
+        b = a;
+        a = curr;
+    }
+    return b;
+}
