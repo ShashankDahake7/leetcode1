@@ -1,0 +1,87 @@
+Approach-
+// Let's try to calculate what will be the maximum amount of money required when our window for guess starts with i and is of length l
+// If l = 1, then the number guessed will always be correct. So penalty will be 0.
+// If l = 2, let's take i = 3, so the range is [3, 4], the maximum amount will be required when our initial guess is wrong.
+// If the ans is 4, and we guessed 3 penalty is 3
+// If the ans is 3 and we guessed 4 penalty is 4
+// So to minimize penalty we should always guess the lower of two numbers.
+// For any other l, we can choose a number j in the range (i, i+l-1) and the cost will be -
+// j + maximum of money required for guaranteed win in two subranges - (i, j-1) , (j+1, i+l-1)
+// To minimize the maximum money, we need to find the optimal j.
+// Note: The number will be in either one of the two subranges, so we need to get only the maximum, not the summation of money in the two subranges.
+// Recursion+Memoization
+class Solution {
+public:
+    int getMoneyAmount(int n) {
+        vector<vector<int>> dp(n+1, vector<int>(n+1, 0));
+        
+        //dp[i][j] - the amount of money needed for guaranteed win,
+        // when range is [i, j] (note: both are inclusive)
+        for(int l = 1; l <= n; l++)
+        {
+            for(int i = 0; i+l-1 <= n; i++)
+            {
+                
+                if(l==1)
+                {
+                    // if length = 1, then the only number guessed is correct, no penalty
+                    dp[i][i+l-1] = 0; 
+                }
+                else if(l==2)
+                {
+                    // if length = 2, guess the lower number, 
+                    // if it's not correct then the other number will be the correct one
+                    // so max amount to guarantee win is the lower of two numbers
+                    dp[i][i+l-1] = i; 
+                }
+                else
+                {
+                    int ans = INT_MAX;
+                    // if you guess a number j between i, i+l-1
+                    // then cost will be j + max of the money required to guarantee win on the either side
+                    for(int j = i+1; j < i+l-1; j++)
+                    {
+                         ans = min(ans, j + max(dp[i][j-1], dp[j+1][i+l-1]));
+                    }
+                    
+                    dp[i][i+l-1] = ans;
+                }
+            }
+        }
+        
+        return dp[1][n];
+    }
+};
+
+// Iterative
+class Solution {
+public:
+    vector<vector<int>> dp;
+    
+    int solve(int start, int end)
+    {
+        if(start>= end)
+            return 0;
+        
+        if(dp[start][end] != -1)
+            return dp[start][end];
+        
+        int ans = 0;
+        int result = INT_MAX;
+        for(int i=start; i<=end; i++)
+        {
+            int left = solve(start,i-1);
+            int right = solve(i+1,end);
+            ans = max(left,right) + i;      // this line gurantee to include the money that is needed to win higher values
+            result = min(ans,result);
+        }
+        
+        return dp[start][end] = result;
+    }
+    
+    int getMoneyAmount(int n) {
+        int ans = 0;
+        dp = vector<vector<int>>(n+1,vector<int>(n+1,-1));
+        return solve(1,n);
+    }
+};
