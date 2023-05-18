@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int numSubarrayProductLessThanK(vector<int>& arr, int k) {
+        if(k==0){return 0;}
+        int ans=0;
+        int pro=1;
+        int i=0,e=0;
+        for(;e<arr.size();e++){  // basic way soling sliding window ... moving right always by one ..
+            pro*=arr[e];
+            while(pro>=k && i<=e){ // improtant case 
+                pro/=arr[i];ans+=e-i;i++;
+            }
+        }
+        ans+=(e-i)*(e-i+1)/2;
+        return ans;
+    }
+};
