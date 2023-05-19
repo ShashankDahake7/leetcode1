@@ -1,0 +1,79 @@
+// Method -1 [Recursion]
+// T->O(Expo) && S->O(n) [Recursion Stack Space]
+class Solution {
+public:
+	int f(int i,int prev,vector<vector<int>>& pairs,int n){
+		if(i==n) return 0;
+		int pick=INT_MIN;
+		if(prev==-1 || pairs[prev][1]<pairs[i][0])pick=1+f(i+1,i,pairs,n);
+		int notpick=f(i+1,prev,pairs,n);
+		return max(pick,notpick);
+	}
+
+	int findLongestChain(vector<vector<int>>& pairs) {
+		int n=pairs.size();
+		sort(pairs.begin(),pairs.end());
+		return f(0,-1,pairs,n);
+	}
+};
+
+// Method - 2 [Memoization]
+// T->O(n^2) && S->O(n^2) + O(n) [Recursion Stack Space]
+class Solution {
+public:
+	int f(int i,int prev,vector<vector<int>>& pairs,int n,vector<vector<int>>& dp){
+		if(i==n) return 0;
+		if(dp[i][prev+1]!=-1) return dp[i][prev+1];
+		int pick=INT_MIN;
+		if(prev==-1 || pairs[prev][1]<pairs[i][0])pick=1+f(i+1,i,pairs,n,dp);
+		int notpick=f(i+1,prev,pairs,n,dp);
+		return dp[i][prev+1]=max(pick,notpick);
+	}
+	int findLongestChain(vector<vector<int>>& pairs) {
+		int n=pairs.size();
+		sort(pairs.begin(),pairs.end());
+		vector<vector<int>> dp(n,vector<int>(n+1,-1));
+		return f(0,-1,pairs,n,dp);
+	}
+};
+
+// Method - 3 [Tabulation]
+// T->O(n^2) && S->O(n^2)
+class Solution {
+public:
+	int findLongestChain(vector<vector<int>>& pairs) {
+		int n=pairs.size();
+		sort(pairs.begin(),pairs.end());
+		vector<vector<int>> dp(n+1,vector<int>(n+2,0));
+		for(int i=n-1;i>=0;i--){
+			for(int prev=i-1;prev>=-1;prev--){
+				int pick=INT_MIN;
+				if(prev==-1 || pairs[prev][1]<pairs[i][0])pick=1+dp[i+1][i+1];
+				int notpick=dp[i+1][prev+1];
+				dp[i][prev+1]=max(pick,notpick);
+			}
+		}
+		return dp[0][0];
+	}
+};
+
+// Method - 4 [Space Optimization]
+// T->O(n^2) && S->O(n)
+class Solution {
+public:
+	int findLongestChain(vector<vector<int>>& pairs) {
+		int n=pairs.size();
+		sort(pairs.begin(),pairs.end());
+		vector<int> last(n+1,0),curr(n+1,0);
+		for(int i=n-1;i>=0;i--){
+			for(int prev=i-1;prev>=-1;prev--){
+				int pick=INT_MIN;
+				if(prev==-1 || pairs[prev][1]<pairs[i][0])pick=1+last[i+1];
+				int notpick=last[prev+1];
+				curr[prev+1]=max(pick,notpick);
+			}
+			last=curr;
+		}
+		return last[0];
+	}
+};
