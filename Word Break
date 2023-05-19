@@ -1,0 +1,99 @@
+// Time Complexity : O(2^N), Given a string of length N, there are N+1 ways to split it into two parts. At each step, we have a choice: to split or not to split.
+// In the worse case, when all choices are to be checked, that results in O(2^N).
+// Space Complexity : O(N), The depth of the recursion tree can go upto N.
+// Solved using String + Backtracking + Hash Table.
+
+// Method-1
+class Solution {
+private:
+    bool wordBreak(string s, unordered_set<string> &set){
+        if(s.size() == 0){
+            return true;
+        }
+        for(int i=0; i<s.size(); i++){
+            if(set.count(s.substr(0, i+1)) && wordBreak(s.substr(i+1), set)){
+                return true;
+            }
+        }
+        return false;
+    }
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> set(wordDict.begin(), wordDict.end());
+        return wordBreak(s, set);
+    }
+};
+
+// Method-2
+class Solution {
+private:
+    bool wordBreak(string s, unordered_set<string> &set, int start){
+        if(start == s.size()){
+            return true;
+        }
+        for(int i=start; i<s.size(); i++){
+            if(set.count(s.substr(start, i+1-start)) && wordBreak(s, set, i+1)){
+                return true;
+            }
+        }
+        return false;
+    }
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> set(wordDict.begin(), wordDict.end());
+        return wordBreak(s, set, 0);
+    }
+};
+
+// Time Complexity : O(N^3), Size of recursion tree can go up to N^2.
+// Space Complexity : O(N), The depth of the recursion tree can go upto N.
+// Solved using String + DP(Memoisation) + Hash Table.
+
+// Method-3
+class Solution {
+private:
+    bool wordBreak(string s, unordered_set<string> &set, vector<int> &memo, int start){
+        if(start == s.size()){
+            return true;
+        }
+        if(memo[start] != -1){
+            return memo[start];
+        }
+        for(int i=start; i<s.size(); i++){
+            if(set.count(s.substr(start, i+1-start)) && wordBreak(s, set, memo, i+1)){
+                memo[start] = true;
+                return true;
+            }
+        }
+        return memo[start] = false;
+    }
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        vector<int> memo(s.size(), -1);
+        unordered_set<string> set(wordDict.begin(), wordDict.end());
+        return wordBreak(s, set, memo, 0);
+    }
+};
+
+// Time Complexity : O(N^3), There are two nested loops, and substring computation at each iteration. Overall that results in O(N^3) time complexity.
+// Space Complexity : O(N), Length of dp array is N+1. 
+// Solved using String + DP(Tabulation) + Hash Table.
+
+// Method-4
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        vector<bool> dp(s.size()+1, 0);
+        dp[0] = true;
+        unordered_set<string> set(wordDict.begin(), wordDict.end());
+        for(int i=1; i<=s.size(); i++){
+            for(int j=0; j<i; j++){
+                if(dp[j] && set.count(s.substr(j, i-j))){
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[s.size()];
+    }
+};
