@@ -1,0 +1,44 @@
+// Method-1
+class Solution {
+public:
+    ListNode* deleteMiddle(ListNode* head) {
+        if(head==NULL || head->next==NULL){
+            return head->next;
+        }
+        ListNode* temp=head;
+        int l=0;
+        while(temp!=NULL){
+            temp=temp->next;
+            l++;
+        }
+        l/=2;
+        temp=head;
+        while(l>1){
+            temp=temp->next;
+            l--;
+        }
+        temp->next=temp->next->next;
+        return head;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    ListNode* deleteMiddle(ListNode* head) {
+        if(head==NULL || head->next==NULL){
+            return NULL;
+        }
+        ListNode* slow=head;
+        ListNode* fast=head;
+        ListNode* prev=NULL;
+        while(fast!=NULL && fast->next!=NULL){
+            prev=slow;
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        prev->next=prev->next->next;
+        delete slow;
+        return head; 
+    }
+};
