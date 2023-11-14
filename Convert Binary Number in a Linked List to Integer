@@ -1,0 +1,39 @@
+class Solution {
+public:
+    ListNode* rev(ListNode* head){
+        ListNode* curr=head;
+        ListNode* prev=NULL;
+        ListNode* frwd=NULL;
+        while(curr!=NULL){
+            frwd=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=frwd;
+        }
+        return prev;
+
+    }
+    int power(int data,int place){
+        if(data==1){
+            int ans=1;
+            for(int i=0;i<place;i++){
+                ans=ans*2;
+            }
+            return ans;
+        }
+        else{
+            return 0;
+        }
+    }
+    int getDecimalValue(ListNode* head) {
+        int ans=0;
+        int place=0;
+        head=rev(head);
+        ListNode* temp=head;
+        while(temp!=NULL){
+            ans+=power(temp->val,place++);
+            temp=temp->next;
+        }
+        return ans;
+    }
+};
