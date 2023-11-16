@@ -1,0 +1,35 @@
+class Solution {
+public:
+    void solve(long long val, int prev, int &target, string &num, string output, int index, vector<string>&ans){
+        if(index >= num.size()){
+            if(val == target){
+                ans.push_back(output);
+            }
+            return;
+        }
+        string temp = "";
+        long long curr_val = 0;
+        for(int i=index; i<num.size(); i++){
+            temp += num[i];
+            curr_val = curr_val*10 + (num[i] - '0');
+            if(index == 0){
+                solve(curr_val, curr_val, target, num, temp, i+1, ans);
+            }
+            else{
+                solve(val+curr_val, curr_val, target, num, output+"+"+temp, i+1, ans);
+                solve(val-curr_val, -1*curr_val, target, num, output+"-"+temp, i+1, ans);
+                solve(val-prev+prev*curr_val, prev*curr_val, target, num, output+"*"+temp, i+1, ans);
+            }
+            if(num[index]=='0') break;
+        }
+    }
+    vector<string> addOperators(string num, int target) {
+        vector<string>ans;
+        string output;
+        int index = 0;
+        long long val = 0;
+        int prev = 0;
+        solve(val, prev, target, num, output, index, ans);
+        return ans;
+    }
+};
