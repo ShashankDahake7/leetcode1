@@ -1,0 +1,73 @@
+// Using Single Queue
+class MyStack {
+private:
+    queue<int> q;
+public:
+    MyStack() {}    
+    void push(int element) {
+        q.push(element);
+        for(int i=0;i<q.size()-1;i++){
+            int x=q.front();
+            q.pop();
+            q.push(x);
+        }
+    }
+    int pop() {
+        if(q.size()==0){
+            return -1;
+        }
+        else{
+            int element=q.front();
+            q.pop();
+            return element;
+        }
+    }
+    int top() {
+        if(q.size()==0){
+            return -1;
+        }
+        else{
+            return q.front();
+        }
+    }
+    bool empty() {
+        if(q.size()==0){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+};
+
+// Using Two Queues
+class MyStack {
+public:
+    queue<int> q1,q2;
+    MyStack() {}
+    void push(int x) {
+        while(!q1.empty()){
+            q2.push(q1.front());
+            q1.pop();
+        }
+        q1.push(x);
+        while(!q2.empty()){
+            q1.push(q2.front());
+            q2.pop();
+        }
+    }    
+    int pop() {
+        int element = q1.front();
+        q1.pop();
+        return element;
+    }
+    int top() {
+        return q1.front();
+    }
+    bool empty() {
+        if(q1.empty()){
+            return true;
+        }
+        return false;
+    }
+};
