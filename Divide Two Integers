@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        if(dividend <= -1<<31 && divisor == -1){
+            return INT_MAX;
+        }
+        if(dividend <= -1<<31 && divisor == 1){
+            return INT_MIN;
+        }
+        bool sign = ((dividend<0) ^ (divisor<0));
+        long int dvid= abs(dividend);
+        long int div = abs(divisor);    
+        long long int ans=0,temp=0;
+        for(int i=31;i>=0;i--){
+            if(temp + (div<<i) <= dvid){
+                temp += div<<i;
+                ans += 1<<i;
+            }
+        }
+        if(sign){
+            ans= -ans;
+        }
+        return ans;
+    }
+};
