@@ -1,0 +1,103 @@
+class Solution {
+private:
+    vector<int> nextSmallerLeft(vector<int>& nums) {
+        int n = nums.size();
+        stack<int> st;
+        vector<int> leftMin;
+        for(int i=0;i<n;i++){
+             
+            // Ignoring equal to sign for this test case [71,55,82,55] whre subarray consisits minimum element more than once as I'm considering equal to sign in nextSmallerRight fn
+            while(!st.empty() && nums[st.top()]>nums[i]) {
+                st.pop();
+            }
+            if(st.empty()){
+                leftMin.push_back(-1);
+            }
+            else{
+                leftMin.push_back(st.top());
+            }
+            st.push(i);
+        }
+        return leftMin;
+    }
+    vector<int> nextSmallerRight(vector<int>& nums) {
+        int n = nums.size();
+        stack<int> st;
+        vector<int> rightMin;
+        for(int i=n-1;i>=0;i--){
+            while(!st.empty() && nums[st.top()]>=nums[i]){
+                st.pop();
+            }
+            if(st.empty()){
+                rightMin.push_back(n);
+            }
+            else{
+                rightMin.push_back(st.top());
+            }
+            st.push(i);
+        }
+        reverse(rightMin.begin(),rightMin.end());
+        return rightMin;
+    }
+    vector<int> nextGreaterLeft(vector<int>& nums) {
+        int n = nums.size();
+        stack<int> st;
+        vector<int> leftMax;
+        for(int i=0;i<n;i++){
+            while(!st.empty() && nums[st.top()]<nums[i]){
+                st.pop();
+            }
+            if(st.empty()){
+                leftMax.push_back(-1);
+            }
+            else{
+                leftMax.push_back(st.top());
+            }
+            st.push(i);
+        }
+        return leftMax;
+    }
+    vector<int> nextGreaterRight(vector<int>& nums) {
+        int n = nums.size();
+        stack<int> st;
+        vector<int> rightMax;
+        for(int i=n-1;i>=0;i--){
+            while(!st.empty() && nums[st.top()]<=nums[i]){
+                st.pop();
+            }
+            if(st.empty()){
+                rightMax.push_back(n);
+            }
+            else{
+                rightMax.push_back(st.top());
+            }
+            st.push(i);
+        }
+        reverse(rightMax.begin(),rightMax.end());
+        return rightMax;
+    }
+
+public:
+    long long subArrayRanges(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> leftMin = nextSmallerLeft(nums);
+        vector<int> rightMin = nextSmallerRight(nums);
+        vector<int> leftMax = nextGreaterLeft(nums);
+        vector<int> rightMax = nextGreaterRight(nums);
+        // Summation of Min
+        long long minSum = 0;
+        for(int i=0; i<n; i++) {
+            // Number of subarrays that the particular element will be minimum
+            long long noOfSubArrays = (rightMin[i]-i) * (i-leftMin[i]);
+            minSum = minSum + (nums[i] *  noOfSubArrays);
+        }
+        // Summation of Max
+        long long maxSum = 0;
+        for(int i=0; i<n; i++) {
+            // Number of subarrays that the particular element will be maximum
+            long long noOfSubArrays = (rightMax[i]-i) * (i-leftMax[i]);
+            maxSum = maxSum + (nums[i] *  noOfSubArrays);
+        }
+        return maxSum - minSum;
+    }
+};
