@@ -1,0 +1,48 @@
+class Solution {
+public:
+    vector<string> findWords(vector<string>& words) {
+        vector<string> ans;
+        string first = "qwertyuiop"; 
+        string second = "asdfghjkl";
+        string third = "zxcvbnm";
+        for(auto it : words){   
+            if(first.find(tolower(it[0])) != string::npos){ 
+                int count = 0;
+                for(int i = 0; i < it.size(); i++){
+                    if(first.find(tolower(it[i])) == string::npos){
+                        break;
+                    }
+                    count++;
+                }
+                if(count == it.size()){
+                    ans.push_back(it);
+                }
+            }
+            else if(second.find(tolower(it[0])) != string::npos){ 
+                int count = 0;
+                for(int i = 0; i < it.size(); i++){
+                    if(second.find(tolower(it[i])) == string::npos){
+                        break;
+                    }
+                    count++;
+                }
+                if(count == it.size()){
+                    ans.push_back(it);
+                }
+            }
+            else if(third.find(tolower(it[0])) != string::npos){ 
+                int count = 0;
+                for(int i = 0; i < it.size(); i++){
+                    if(third.find(tolower(it[i])) == string::npos){
+                        break;
+                    }
+                    count++;
+                }
+                if(count == it.size()){
+                    ans.push_back(it);
+                }
+            }
+        }
+        return ans;
+    }
+};
