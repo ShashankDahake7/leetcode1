@@ -27,10 +27,10 @@ class Solution {
 public:
     vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
         vector<string> result;
+        int min_sum = INT_MAX;
         unordered_map <string,int> mp;
-        int min_sum=INT_MAX;
         for(int i=0;i<list1.size();i++){
-            mp[list1[i]]++;
+            mp[list1[i]]=i;
         }
         for(int j=0;j<list2.size();j++){
             if(mp.find(list2[j]) !=mp.end()){
