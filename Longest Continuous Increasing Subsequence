@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int findLengthOfLCIS(vector<int>& nums) {
+        int len = 1;
+        int maxlen = 1;
+        for(int i = 1; i < nums.size(); i++){
+            if((i > 0) && (nums[i - 1] < nums[i])){
+                len++;
+            }
+            else{
+                len = 1;
+            }
+             maxlen = max(maxlen, len);
+        }
+        return maxlen;
+    }
+};
