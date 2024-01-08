@@ -1,0 +1,55 @@
+// Method-1
+class Solution {
+public:
+    void inorder(TreeNode* root,int low,int high,int &sum){
+        if(root!=NULL){
+            inorder(root->left,low,high,sum);
+            if(root->val>=low and root->val<=high){
+                sum+=root->val;
+            }
+            inorder(root->right,low,high,sum);
+         }
+    }
+    int rangeSumBST(TreeNode* root, int low, int high) {
+        int sum=0;
+        inorder(root,low,high,sum);
+        return sum;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    void inorder(TreeNode* root, vector<int> &in){
+        if(root == NULL){
+            return ;
+        }
+        inorder(root->left, in);
+        in.push_back(root->val);
+        inorder(root->right, in);
+    }
+    int rangeSumBST(TreeNode* root, int low, int high) {
+        vector<int> inorderVal;
+        inorder(root, inorderVal);
+        int n = inorderVal.size();
+        int sum = 0;
+        bool flag = false;
+        for(int i=0 ; i<n ; i++){
+            if(inorderVal[i] == low){
+                sum += inorderVal[i];
+                flag = true;
+            } 
+            else if(inorderVal[i] == high) {
+                sum += inorderVal[i];
+                flag = false;
+            } 
+            else if(flag == true) {
+                sum += inorderVal[i];
+            } 
+            else {
+                continue;
+            }
+        }
+        return sum;
+    }
+};
