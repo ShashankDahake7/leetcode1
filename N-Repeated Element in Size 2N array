@@ -1,0 +1,66 @@
+// Method-1
+class Solution {
+public:
+    int repeatedNTimes(vector<int>& nums) {
+        int n = nums.size() / 2;
+        int ans = 0;
+        for(int i = 0; i < 2 * n - 1; i++){
+            int count = 1;
+            for(int j = i + 1; j < 2 * n; j++){
+                if(nums[i] == nums[j]){
+                    count++;
+                }
+            }
+            if(count == n){
+                ans = nums[i];
+                break;
+            }
+        }
+        return ans;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int repeatedNTimes(vector<int>& a) {
+        unordered_map<int,int> mp;
+        for(int i = 0; i < a.size(); i++){
+            if(mp[a[i]] > 0){
+                return a[i];
+            }
+            mp[a[i]]++;
+        }   
+        return 0;
+    }
+};
+
+// Method-3
+class Solution {
+public:
+    int repeatedNTimes(vector<int>& nums) {
+        unordered_set<int> st;
+        int n=nums.size();
+        for(int i=0;i<n;i++){
+            if(st.find(nums[i])!=st.end()){
+                return nums[i];
+            }
+            st.insert(nums[i]);
+        }
+        return 0;
+    }
+};
+
+// Method-4
+class Solution {
+public:
+    int repeatedNTimes(vector<int>& A) {
+        sort(A.begin(), A.end());
+        for(int i = 0; i < A.size() - 1; i++){
+            if(A[i] == A[i+1]){
+                return A[i];
+            }
+        }
+        return 0;
+    }
+};
