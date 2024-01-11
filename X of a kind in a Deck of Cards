@@ -7,7 +7,7 @@ public:
         }
         int gcdValue = mp[deck[0]];
         for(auto x : mp){
-            gcdValue = gcd(g, x.second);
+            gcdValue = gcd(gcdValue, x.second);
         }
         if(gcdValue > 1){
             return true;
