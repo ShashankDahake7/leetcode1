@@ -1,0 +1,52 @@
+// Method-1
+class Solution {
+public:
+    vector<int> fairCandySwap(vector<int>& A, vector<int>& B) {
+        int n = A.size(), m = B.size();
+        int a = 0, b =0;
+        for(int x : A){
+            a += x;
+        }
+        for(int x : B){
+            b += x;
+        }
+        vector<int> ans;
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = m - 1; j >= 0; j--){
+                int diff = A[i] - B[j];
+                if((a - diff) == (b + diff)){
+                    ans.push_back(A[i]);
+                    ans.push_back(B[j]);
+                    return ans;
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+// Method-2
+#include <vector>
+#include <set>
+
+class Solution {
+public:
+    vector<int> fairCandySwap(vector<int>& A, vector<int>& B) {
+        int sum1 = 0, sum2 = 0;
+        set<int> s;
+        for (int x : A) {
+            sum1 += x;
+        }
+        for (int x : B) {
+            sum2 += x;
+            s.insert(x);
+        }
+        int diff = (sum2 - sum1) / 2;
+        for (int a : A) {
+            if (s.find(a + diff) != s.end()) {
+                return {a, a + diff};
+            }
+        }        
+        return {};
+    }
+};
