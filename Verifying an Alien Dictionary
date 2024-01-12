@@ -1,6 +1,6 @@
 class Solution {
 public:
-    undordered_map<char, int> mp;
+    unordered_map<char, int> mp;
     bool correctOrder(string a, string b){
         int n = min(a.size(), b.size());
         for(int i = 0; i < n; i++){
