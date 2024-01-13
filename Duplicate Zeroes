@@ -1,5 +1,5 @@
 class Solution {
-public:a
+public:
     void insert(vector<int>& arr, int i, int j){
         if(j < arr.size()){
             arr[j] = arr[i];
