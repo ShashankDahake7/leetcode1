@@ -1,0 +1,47 @@
+// Method-1
+class Solution {
+public:
+    int minSteps(string s, string t) {
+        unordered_map<char, int> m1;
+        unordered_map<char, int> m2;
+        for(auto i : s){
+            m1[i]++;
+        }
+        for(auto i : t){
+            m2[i]++;
+        }
+        int count = 0;
+        for(auto i : m1){
+            if(m2.find(i.first) != m2.end()){
+                if(m1[i.first] == m2[i.first]){
+                    count += m1[i.first];
+                }
+                else{
+                    count += min(m1[i.first], m2[i.first]);
+                }
+            }
+        }
+        return s.size() - count;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int minSteps(string s, string t) {
+        int count[26] = {0};
+        int i = 0;
+        while (i < s.size()) {
+            count[t[i] - 'a']++;
+            count[s[i] - 'a']--;
+            i++;
+        }
+        int ans = 0;
+        i = 0;
+        while (i < 26) {
+            ans += max(0, count[i]);
+            i++;
+        }
+        return ans;
+    }
+}; 
