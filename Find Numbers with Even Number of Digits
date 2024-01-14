@@ -1,0 +1,36 @@
+// Method-1
+class Solution {
+public:
+    int findNumbers(vector<int>& nums) {
+        int countEven = 0;
+        for(int i = 0; i < nums.size(); i++){
+            int num = nums[i];
+            int count = 0;            
+            while(num != 0){
+                int digit = num % 10;
+                count++;
+                num /= 10;
+            }
+            if((count % 2) == 0){
+                countEven++;
+            }
+        }
+        return countEven;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int findNumbers(vector<int>& nums) {
+        int n = nums.size();
+        int count = 0;
+        for(int i = 0; i < n; i++){
+            string temp = to_string(nums[i]);
+            if((temp.length() % 2) == 0){
+                count++;
+            }
+        }
+        return count;
+    }
+};
