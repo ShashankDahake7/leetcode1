@@ -1,0 +1,36 @@
+// Method-1
+class Solution {
+public:
+    bool canBeEqual(vector<int>& target, vector<int>& arr) {
+        unordered_map<int, int> mp1, mp2;
+        for(auto i : target){
+            mp1[i]++;
+        }
+        for(auto i : arr){
+            mp2[i]++;
+        }
+        if(mp1 == mp2){
+            return true;
+        }
+        return false;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    bool canBeEqual(vector<int>& target, vector<int>& arr) {
+        sort(target.begin(), target.end());
+        sort(arr.begin(), arr.end());
+        int count = 0;
+        for(int i = 0; i < target.size(); i++){
+            if(target[i] == arr[i]){
+                count++;
+            }
+        }
+        if(count == target.size()){
+            return true;
+        }
+        return false;
+    }
+};
