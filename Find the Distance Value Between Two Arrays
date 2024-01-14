@@ -1,0 +1,45 @@
+// Method-1
+class Solution {
+public:
+    int findTheDistanceValue(vector<int>& arr1, vector<int>& arr2, int d) {
+        int ans = 0;
+        for(auto i : arr1){
+            ans++;
+            for(auto j : arr2){
+                if(abs(i - j) <= d){
+                    ans--;
+                    break;
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int findTheDistanceValue(vector<int>& arr1, vector<int>& arr2, int d) {
+        int ans = 0;
+        sort(arr1.begin(), arr1.end());
+        sort(arr2.begin(), arr2.end());
+        for(auto i : arr1){
+            int s = 0, e = arr2.size() - 1;
+            ans++;
+            while(s <= e){
+                int mid = (s + e) / 2;
+                if((arr2[mid] <= (d + i)) && (arr2[mid] >= (i - d))){
+                    ans--;
+                    break;
+                }
+                else if(arr2[mid] > (d + i)){
+                    e = mid - 1;
+                }
+                else{
+                    s = mid + 1;
+                }
+            }
+        }
+        return ans;
+    }
+};
