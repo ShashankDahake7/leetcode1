@@ -1,0 +1,37 @@
+// Method-1
+class Solution {
+public:
+    static bool compare(int a, int b) {
+        if (__builtin_popcount(a) == __builtin_popcount(b)) {
+            return a < b;
+        }
+        return __builtin_popcount(a) < __builtin_popcount(b);
+    }
+    vector<int> sortByBits(vector<int>& arr) {
+        sort(arr.begin(), arr.end(), compare);
+        return arr;
+    }
+};
+
+// Method-2(Brian Kerninghan's Algorithm)
+class Solution {
+public:
+    static int findWeight(int num) {
+        int weight = 0;
+        while (num > 0) {
+            weight++;
+            num &= (num - 1);
+        }   
+        return weight;
+    }
+    static bool compare(int a, int b) {
+        if (findWeight(a) == findWeight(b)) {
+            return a < b;
+        }
+        return findWeight(a) < findWeight(b);
+    }
+    vector<int> sortByBits(vector<int>& arr) {
+        sort(arr.begin(), arr.end(), compare);
+        return arr;
+    }
+};
