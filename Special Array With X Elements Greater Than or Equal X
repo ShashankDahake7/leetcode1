@@ -1,0 +1,54 @@
+// Method-1
+class Solution {
+public:
+    int specialArray(vector<int>& nums) {
+        int count = 0;
+        for(int i = 1; i <= nums.size(); i++){
+            for(int j = 0; j < nums.size(); j++){
+                if(nums[j] >= i){
+                    count++;
+                }
+            }
+            if(count == i){
+                return count;
+            }
+            count = 0;
+        }
+        return -1; 
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int specialArray(vector<int>& nums){
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        for(int i = 1;i <= n; i++){
+            auto p = lower_bound(nums.begin(), nums.end(),i);
+            if(nums.end() - p == i){
+                return i;
+            }
+        }
+        return -1;  
+    }
+};
+
+// Method-3
+class Solution {
+public:
+    int specialArray(vector<int>& nums) {
+        int total = nums.size();
+        int arr[1001] = {0};
+        for(int num : nums){
+            arr[num]++;
+        }
+        for(int i = 0; i < 1001; i++){
+            if(total == i){
+                return i;
+            }
+            total -= arr[i];
+        }
+        return -1;   
+    }
+};
