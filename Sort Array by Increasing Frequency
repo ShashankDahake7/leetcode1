@@ -1,0 +1,29 @@
+class Solution {
+public:
+    static bool compare(pair<int, int>& a, pair<int, int>& b){
+        if (a.second == b.second) {
+            return a.first > b.first; 
+        }
+        return a.second < b.second;
+    } 
+    vector<int> frequencySort(vector<int>& nums) {
+        unordered_map<int, int> m;
+        for(auto num : nums){
+            m[num]++;
+        }
+        vector<pair<int, int>> freq;
+        for (const auto& i : m) {
+            freq.push_back(i);
+        }
+        sort(freq.begin(), freq.end(), compare);
+        vector<int> ans;
+        for (auto pair : freq) {
+            int n = pair.first;
+            int f = pair.second;
+            for (int i = 0; i < f; i++) {
+                ans.push_back(n);
+            }
+        }
+        return ans;
+    }
+};
