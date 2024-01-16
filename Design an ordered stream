@@ -1,0 +1,51 @@
+// Method-1
+class OrderedStream {
+public:
+    map<int, string> mp;
+    int count = 1;
+    OrderedStream(int n) {
+        count = 1;
+    }
+    vector<string> insert(int idKey, string value) {
+        mp.insert({idKey, value});
+        vector<string> ans;
+        for(auto vl : mp){
+            if(vl.first == count){
+                count++;
+                ans.push_back(vl.second);
+            }
+        }
+        return ans;
+    }
+};
+
+// Method-2
+class OrderedStream {
+public:
+    string arr[1005];
+    int count = 1; 
+    int n;
+    OrderedStream(int n) {
+        count = 1;
+        for(int i = 1; i <= n; i++){
+            arr[i]="NULLSTRING";
+        }
+        this->n= n;
+    }
+    vector<string> insert(int idKey, string value) {
+        arr[idKey] = value;
+        vector<string> ans;
+        while(count <= n && arr[count] != "NULLSTRING"){
+            ans.push_back(arr[count]);
+            count++;
+        }
+        return ans;
+    }
+};
+
+/**
+ * Your OrderedStream object will be instantiated and called as such:
+ * OrderedStream* obj = new OrderedStream(n);
+ * vector<string> param_1 = obj->insert(idKey,value);
+ */
+
