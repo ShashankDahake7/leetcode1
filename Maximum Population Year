@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int maximumPopulation(vector<vector<int>>& logs) {
+        int n = logs.size();
+        int maxPopulation = INT_MIN, maxPopulationYear = 0;
+        map<int, int> tracker;
+        for (int idx = 0; idx < n; idx++) {
+            tracker[logs[idx][0]]++;
+            tracker[logs[idx][1]]--;
+        }
+        int sum = 0;
+        for (auto it : tracker) {
+            sum += it.second;
+            if (sum > maxPopulation) {
+                maxPopulation = sum;
+                maxPopulationYear = it.first; 
+            }    
+        }
+        return maxPopulationYear;
+    }
+};
