@@ -1,0 +1,24 @@
+class Solution {
+public:
+    void Find_Subset(vector<int>& nums, vector<int>& ans , int &total , int i){
+        if(i == nums.size()){
+            int Xor = 0;
+            for(int j = 0; j < ans.size(); j++){
+                Xor ^= ans[j];
+            }
+            total += Xor;
+            return;
+        }
+        Find_Subset(nums, ans, total, i + 1);        
+        ans.push_back(nums[i]);
+        Find_Subset(nums, ans, total, i + 1);
+        ans.pop_back(); 
+    }
+    int subsetXORSum(vector<int>& nums) {
+        vector<int> ans;
+        int total = 0;
+        int i = 0;
+        Find_Subset(nums, ans, total, i); 
+        return total;
+    }
+};
