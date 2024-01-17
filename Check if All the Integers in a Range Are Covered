@@ -1,0 +1,59 @@
+// Method-1
+class Solution {
+public:
+    bool isCovered(vector<vector<int>>& ranges, int left, int right) {
+        unordered_map<int, int> mp;
+        for(auto x : ranges){
+            for(int i = x[0];i <= x[1]; i++){
+                mp[i]++;
+            }
+        }
+        for(int i = left; i <= right;i++){
+            if(mp.find(i) == mp.end()){
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    bool isCovered(vector<vector<int>>& ranges, int left, int right) {
+        unordered_map<int, int>mp;
+        sort(ranges.begin(), ranges.end());
+        for(auto x : ranges){
+            if(x[0] <= left && x[1] >= right){
+                return true;
+            }
+            else if(x[0] <= left && x[1] < right){
+                left = max(x[1] + 1, left);
+            }
+        }
+        return false;
+    }
+};
+
+// Method-3
+class Solution {
+public:
+    bool isCovered(vector<vector<int>>& ranges, int left, int right) {
+        int n = ranges.size();
+        int diff[52] = {0};
+        for(auto x : ranges){
+            diff[x[0]]++;
+            diff[x[1] + 1]--;
+        }
+        vector<int> pref(52, 0);
+        for(int i = 1; i < 52; i++){
+            pref[i] = pref[i - 1] + diff[i];
+        }
+        for(int i = left; i <= right; i++){
+            if(pref[i] <= 0){
+                return false;
+            }
+        }
+        return true;
+    }
+};
