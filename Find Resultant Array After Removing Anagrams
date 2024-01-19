@@ -1,0 +1,58 @@
+// Method-1
+class Solution {
+public:
+    bool isAnagram(string &str1, string &str2){
+        int mp[256] = {0}, n = str1.length(), m = str2.length();
+        if(n != m){
+            return false;
+        }
+        for(int i = 0; i < n; i++){
+            mp[str1[i] - 'a']++;
+            mp[str2[i] - 'a']--;
+        }
+        for(int i = 0; i < 256; i++){
+            if(mp[i] != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+    vector<string> removeAnagrams(vector<string>& words) {
+        int r = words.size(), i = 0, j = 0, k = 0;
+        while(j < r){
+            while((j < r) && (isAnagram(words[j], words[i]) == true)){
+                j++;
+            }
+            if((j < r) && (!isAnagram(words[j], words[i]))){
+                words[k] = words[i];
+                k++;
+                i = j;
+            }
+        }
+        if(j == r){
+            words[k] = words[i];
+        }
+        k++;
+        words.resize(k);
+        return words;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    vector<string> removeAnagrams(vector<string>& words) {
+        for(int i = 1; i < words.size(); i++){
+            string s1 = words[i];
+            string s2 = words[i - 1];
+            sort(s1.begin(), s1.end());
+            sort(s2.begin(), s2.end());
+            if(s1 == s2){
+                words.erase(words.begin() + i);
+                i--;
+            }
+        }
+        return words;
+    }
+    
+};
