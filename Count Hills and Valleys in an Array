@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int countHillValley(vector<int>& nums) {
+        int count = 0;
+        for(int i = 1; i < nums.size() - 1; i++){
+            // to delete duplicates if index i and i + 1 are same 
+            if(nums[i] == nums[i+1]) {
+                nums.erase(nums.begin() + i);
+                i--;
+            }
+            // for valleys
+            else if((nums[i] < nums[i - 1]) && (nums[i] < nums[i + 1])){  
+                count++;
+            } 
+            // for hills
+            else if((nums[i] > nums[i - 1]) && (nums[i] > nums[i + 1])){
+                count++;
+            }
+        }
+     return count;   
+    }
+};
