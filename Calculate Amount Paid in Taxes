@@ -12,7 +12,7 @@ public:
             if(brackets[i][0] >= income){
                 break;
             }
-            prev = bracket[i][0];
+            prev = brackets[i][0];
         }
         return ans;
     }
