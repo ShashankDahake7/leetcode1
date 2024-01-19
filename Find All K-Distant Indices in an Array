@@ -1,0 +1,44 @@
+// Method-1
+class Solution {
+public:
+    vector<int> findKDistantIndices(vector<int>& nums, int key, int k) {
+        vector<int> ans;
+        int n = nums.size();
+        for(int i = 0; i < n; i++){
+            int a = -1;
+            for(int j = 0; j < n; j++){
+                if((abs(i - j) <= k) && (nums[j] == key)){
+                    a = i;
+                }
+            }
+            if(a != -1){
+                ans.push_back(a);
+            }
+        }
+        return ans;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    vector<int> findKDistantIndices(vector<int>& nums, int key, int k) {
+        int l = 0, h = 0, n = nums.size();
+        vector<int> res;
+        while(h < n){
+            if(nums[h] == key){ // If element is found
+                if((abs(h - l) <= k) && (l < n)){ // Check if it's in k distance and l is in bound of array
+                    res.push_back(l);
+                    l++; 
+                }
+                else{                                           
+                    (l > h) ? h++ : l++;  // If l has exceded h, increment h (find key again if it exists, no need to reset l because all indices that were in k distance of previous key have been added)
+                }
+            }
+            else{ 
+                h++; // keep incrementing h till key is found
+            }
+        }
+        return res;
+    }
+};
