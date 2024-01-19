@@ -1,0 +1,50 @@
+// Method-1
+class Solution {
+public:
+    int prefixCount(vector<string>& words, string pref) {
+        int count = 0;
+        for(auto word : words){
+            int p = 0;
+            for(int i = 0; i < pref.size(); i++){
+                if(word[i] != pref[i]){
+                    break;
+                }
+                else{
+                    p++;
+                }
+            }
+            if(p == pref.size()){
+                count++;
+            }
+        }
+        return count;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int prefixCount(vector<string>& words, string pref) {
+        int count = 0;
+        for(auto word : words){
+            if(word.substr(0,pref.size()) == pref){
+                count++;
+            }
+        }
+        return count;
+    }
+};
+
+// Method-3
+class Solution {
+public:
+    int prefixCount(vector<string>& words, string pref) {
+        int count = 0;
+        for(auto word : words){
+            if(word.find(pref) < 1){
+                count++;
+            }
+        }
+        return count;
+    }
+};
