@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<int> numberOfPairs(vector<int>& nums) {
+        unordered_map<int, int> mp;
+        for(auto i : nums){
+            mp[i]++;
+        }
+        int pair = 0, leftover = 0;
+        for(auto i : mp){
+            if((i.second % 2) != 0){
+                leftover++;
+            }
+            pair += i.second / 2;
+        }
+        return {pair, leftover};
+    }
+};
