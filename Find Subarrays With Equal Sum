@@ -1,0 +1,40 @@
+// Method-1
+class Solution {
+public:
+    bool findSubarrays(vector<int>& nums) {
+        int n = nums.size();
+        map<int, int> m;
+        for(int i = 0; i < n - 1; i++){
+            int k = nums[i] + nums[i + 1];
+            m[k]++;
+        }
+        for(auto it : m){
+            if(it.second >= 2){
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    bool findSubarrays(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans;
+        for(int i = 0; i < n - 1; i++){
+            int sum = nums[i] + nums[i + 1];
+            ans.push_back(sum);
+        }
+        sort(ans.begin(), ans.end());
+        for(int i = 0; i < ans.size() - 1; i++){
+            int sum1 = ans[i];
+            int sum2 = ans[i + 1];
+            if(sum1 == sum2){
+                return true;
+            }
+        }
+        return false;
+    }
+};
