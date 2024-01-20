@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int hardestWorker(int n, vector<vector<int>>& log) {
+        int emplID = log[0][0];
+        int lastTime = log[0][1];
+        int maxTime =  lastTime;
+        for(int i = 1; i < log.size(); i++){
+            int temp = log[i][1] - lastTime;
+            if(maxTime < temp){
+                maxTime = temp ;
+                emplID = log[i][0] ;
+            }
+            if(maxTime == temp){
+                emplID = min(log[i][0], emplID);
+            }
+            lastTime = log[i][1];
+        }
+        return emplID ;
+    }
+};
