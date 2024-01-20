@@ -1,0 +1,50 @@
+// Method-1
+class Solution {
+public:
+    int mostFrequentEven(vector<int>& nums) {
+        map<int, int> mp;
+        for(auto i : nums){
+            if((i % 2) == 0){
+                mp[i]++;
+            }
+        }
+        int maxi = INT_MIN, ans = -1;
+        for(auto i : mp){
+           if(i.second > maxi){
+               maxi = i.second;
+               ans = i.first;
+           }
+        }
+        return ans;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int mostFrequentEven(vector<int>& nums) {
+        int s = nums.size();
+        sort(nums.begin(), nums.end());
+        int counter = 0, curr = -1, num_buff = -1, counter_buff = 0;
+        for(int i = 0; i < s; i++){
+            if((nums[i] & 1) == 0){
+                if(nums[i] == curr)
+                    counter += 1;
+                else if(counter > counter_buff){
+                    num_buff = curr;
+                    curr = nums[i];
+                    counter_buff = counter;
+                    counter = 1;
+                }
+                else{
+                    curr = nums[i];
+                    counter = 1;
+                }
+            }
+        }
+        if(counter > counter_buff){
+            num_buff = curr;
+        }
+        return num_buff;
+    }
+};
