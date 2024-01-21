@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> findColumnWidth(vector<vector<int>>& grid) {
+        int n = grid.size(), m = grid[0].size();
+        vector<int> ans;
+        for(int col = 0; col < m; col++) {
+            string temp = "";
+            int len = 0, maxLen = 0;
+            for(int row = 0; row < n; row++) {
+                temp = to_string(grid[row][col]);
+                len = temp.length();
+                maxLen = max(maxLen, len);
+            }
+            ans.push_back(maxLen);
+        }
+        return ans;
+    }
+};
