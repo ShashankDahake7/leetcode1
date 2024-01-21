@@ -1,0 +1,33 @@
+// Method-1
+class Solution {
+public:
+    int numberOfPoints(vector<vector<int>>& nums) {
+        vector<int> points_within_car(101, 0);
+        int ans = 0;
+        for(int i=0; i<nums.size(); i++) {
+            int start = nums[i][0];
+            int end = nums[i][1];
+            for(int j=start; j<=end; j++) 
+                points_within_car[j]++;
+        }
+        for(auto car:points_within_car)
+            if(car > 0)
+                ans++;
+        return ans;
+        
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int numberOfPoints(vector<vector<int>>& nums) {
+        unordered_map<int ,int> store; 
+        for(auto it : nums){
+            for(int ele = it[0]; ele <= it[1]; ele++){        
+                store[ele]++;
+            }
+        }
+        return store.size(); 
+    }
+}; 
