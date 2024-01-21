@@ -1,0 +1,41 @@
+// Method-1
+class Solution {
+public:
+    int similarPairs(vector<string>& words) {
+        int n = words.size(), ans = 0;
+        for(int i = 0; i < n; i++){
+            string s1 = words[i];
+            sort(s1.begin(), s1.end());
+            s1.erase(unique(s1.begin(), s1.end()), s1.end());
+            for(int j = i + 1; j < n; j++){
+                string s2 = words[j];
+                sort(s2.begin(), s2.end());
+                s2.erase(unique(s2.begin(), s2.end()), s2.end());
+                if(s1 == s2){
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int similarPairs(vector<string>& arr) {
+        unordered_map<string, int> c;
+        for (auto& str: arr) {
+            unordered_set<char> s(str.begin(), str.end());
+            string t(s.begin(), s.end());
+            sort(t.begin(), t.end());
+            c[t]++;
+        }
+        int ans = 0;
+        for (auto& it: c) {
+            int p = it.second;
+            ans += (p * (p - 1)) / 2;
+        }
+        return ans;
+    }
+};
