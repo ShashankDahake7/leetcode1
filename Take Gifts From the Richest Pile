@@ -1,0 +1,46 @@
+// Method-1
+class Solution {
+public:
+    long long pickGifts(vector<int>& gifts, int k) {
+        multiset<int, greater<int>> sets;
+        for(auto var : gifts){
+            sets.insert(var);
+        }
+        while(k){
+            int temp = sqrt(*sets.begin());
+            sets.erase(sets.begin());
+            sets.insert(temp);
+            k--;
+        }
+        long long int res = 0;
+        for(auto var : sets){
+            res += var;
+        }
+        return res;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    long long pickGifts(vector<int>& gifts, int k) {
+        long long n = gifts.size();
+        priority_queue<int> pq;
+        for(int i = 0; i < n; i++){
+            pq.push(gifts[i]);
+        }
+        int count = 0;
+        while(!pq.empty() && count < k){
+            int a = pq.top();
+            pq.pop();
+            pq.push(sqrt(a));
+            count++;
+        }
+        long long ans = 0;
+        while(!pq.empty()){
+            ans += pq.top();
+            pq.pop();
+        }
+        return ans;
+    }
+};
