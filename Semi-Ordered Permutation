@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int semiOrderedPermutation(vector<int>& nums) {
+        int n = nums.size();
+        int i = 0, j = 0;
+        for(int k = 0; k < n; k++){
+            if(nums[k] == 1){
+                i = k;
+            }
+            if(nums[k] == n){
+                j = k;
+            }
+        }
+        if(j < i){
+            return i + n - j - 2;
+        }
+        return i + n - j - 1;
+    }
+};
