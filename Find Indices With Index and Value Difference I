@@ -1,0 +1,40 @@
+// Method-1
+class Solution {
+public:
+    vector<int> findIndices(vector<int>& nums, int indexDifference, int valueDifference) {
+        int n = nums.size();
+        for(int i = 0; i + indexDifference < n; ++i){
+            for(int j = i + indexDifference; j < n; ++j){
+                if(abs(nums[i] - nums[j]) >= valueDifference) {
+                    return {i, j};
+                }
+            }
+        }
+        return {-1, -1};
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    vector<int> findIndices(vector<int>& nums, int indexDifference, int valueDifference) {
+        int minIndex = 0; 
+        int maxIndex = 0; 
+        for (int i = indexDifference; i < nums.size(); ++i) {
+            int comparisonIndex = i - indexDifference;
+            if (nums[comparisonIndex] < nums[minIndex]) {
+                minIndex = comparisonIndex;
+            }
+            if (nums[comparisonIndex] > nums[maxIndex]) {
+                maxIndex = comparisonIndex;
+            }
+            if (nums[i] - nums[minIndex] >= valueDifference) {
+                return {minIndex, i};
+            }
+            if (nums[maxIndex] - nums[i] >= valueDifference) {
+                return {maxIndex, i};
+            }
+        }
+        return {-1, -1};
+    }
+};
