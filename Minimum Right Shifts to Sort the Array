@@ -1,0 +1,40 @@
+// Method-1
+class Solution {
+public:
+    int minimumRightShifts(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> sorted_nums = nums;
+        sort(sorted_nums.begin(), sorted_nums.end());
+        for (int i = 0; i < n; ++i) {
+            if (nums == sorted_nums) {
+                return i;
+            }
+            int last_element = nums.back();
+            nums.pop_back();
+            nums.insert(nums.begin(), last_element);  
+        }
+        return -1;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int minimumRightShifts(vector<int>& nums) {
+        int min = -1, count = 0;
+        int n = nums.size();
+        for(int i = 1; i < n; i++){
+            if(nums[i - 1] > nums[i]){
+                min = i;
+                count++;
+            }
+        }
+        if(min == -1){
+            return 0;
+        }
+        if(count > 1 || nums[0] < nums[n - 1]){
+            return -1;
+        }
+        return n - min;
+    }
+};
