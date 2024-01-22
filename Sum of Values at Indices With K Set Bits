@@ -1,0 +1,45 @@
+// Method-1
+class Solution {
+public:
+    int countSetBits(int num) {
+        int count = 0;
+        while (num > 0) {
+            if((num % 2) == 1){
+                count++;
+            }
+            num = num / 2;
+        }
+        return count;
+    }
+    int sumIndicesWithKSetBits(vector<int>& nums, int k) {
+        int sum = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (countSetBits(i) == k) {
+                sum += nums[i];
+            }
+        }
+        return sum;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int sumIndicesWithKSetBits(vector<int>& nums, int k) {
+        int s = 0, j;
+        for (int i = 0; i < nums.size(); i++){
+            int cnt = 0;
+            j = i;
+            while(j != 0){
+                if ((j & 1) == 1){
+                    cnt++;
+                }
+                j = j >> 1;
+            }
+            if (cnt == k){
+                s += nums[i];
+            }
+        }
+        return s;
+    }
+};
