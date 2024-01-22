@@ -1,0 +1,46 @@
+// Method-1
+class Solution {
+public:
+    int missingInteger(vector<int>& nums) { 
+        int n = nums.size(), sum = nums[0];
+        for(int i = 1; i < n; i++){
+            if(nums[i] == nums[i - 1] + 1){
+                sum += nums[i];
+            }
+            else{
+                break;
+            }
+        }
+        sort(nums.begin(),nums.end());
+        for(int i = 0; i < n; i++){
+            if(nums[i] == sum){
+                sum++;
+            }
+        }
+        return sum;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int missingInteger(vector<int>& nums) {
+        int left = 0, mover = 0, right = 1;
+        int preSum = nums[0];
+        bool isConsec = true;
+        while(right < nums.size() && mover <= right){
+            if(nums[right] - nums[mover] == 1){
+                preSum += nums[right];
+                mover = right;
+                right++;
+            }
+            else{
+                break;
+            }
+        }
+        while(count(nums.begin(), nums.end(), preSum)){
+            preSum++;
+        }
+        return preSum;
+    }
+};
