@@ -34,7 +34,7 @@ public:
                 max = nums[i];
             }
         }
-        int ans = (max - k) - (min - k);
-        return (ans > 0) ? ans : 0;
+        int ans = max - k - min - k;
+        return ans > 0 ? ans : 0;
     }
 };
