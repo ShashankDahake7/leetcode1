@@ -1,0 +1,69 @@
+// Method-1
+class Solution {
+public:
+    bool wordPattern(string pattern, string s) {
+        vector<string> str;
+        unordered_map<char, string> um;
+        unordered_map<string, int> visited;
+        int n = pattern.size();
+        for(int i = 0; i < s.size(); i++) {
+            string tmp = "";
+            while(i < s.size() && s[i] != ' ') {
+                tmp += s[i++];
+            }
+            str.push_back(tmp);
+            // example: string s = "dog cat fish";
+            // we convert dog->str[0], cat->str[1], fish->str[2]
+        }   
+        if(n != str.size()) {
+            return false;
+        }
+        for(int i = 0; i < n; i++) {
+            // first we attach str[i] = 0 that means haven't visited
+            visited.insert(pair<string, int>(str[i], 0)); 
+            if(visited[str[i]] == 0) {
+                // key is unique in unordered_map -> doesn't change value 
+                // example: a->dog | b->cat. 
+                // Now we cant insert "fish" at um[a]
+                um.insert(pair<char, string>(pattern[i], str[i]));
+                visited[str[i]] = 1;
+            }
+            if(str[i] != um[pattern[i]]) {
+                return false;
+            }
+            // example: pattern 'b' -> um[b] is "cat"
+            // but str[i] = "dog" or "fish" -> false
+        }
+        return true;
+    }
+};
+
+// Method-2
+class Solution{
+public:
+    bool wordPattern(string p, string s) {
+        unordered_map<char, string> p2s;
+        unordered_map<string, char> s2p;
+        string temp = "";
+        int idx = 0, n = s.size();
+        for(int i = 0; i <= n; i++){
+            if(s[i] == ' ' || i == n){
+                if(idx < p.size() && (p2s.find(p[idx]) != p2s.end() || s2p.find(temp) != s2p.end())){
+                    if(p2s[p[idx]]!=temp || s2p[temp] != p[idx]){
+                        return false;
+                    }
+                }
+                else{
+                    p2s[p[idx]] = temp;
+                    s2p[temp] = p[idx];
+                }
+                temp = "";
+                idx++; 
+            }
+            else{
+                temp += s[i];
+            }
+        }
+        return idx == p.size();
+    }
+};
