@@ -1,0 +1,46 @@
+// Method-1
+class Solution {
+public:
+    bool canConstruct(string ransomNote, string magazine) {
+        sort(ransomNote.begin(), ransomNote.end());
+        sort(magazine.begin(), magazine.end());
+        int i = 0, j = 0;
+        while(i < ransomNote.length() && j < magazine.length()){
+            if(ransomNote[i] == magazine[j]){
+                i++;
+                j++;
+            }
+            else if(ransomNote[i] > magazine[j]){
+                j++;
+            }
+            else{
+                return false;
+            }
+        }
+        return i == ransomNote.length();
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    bool canConstruct(string ransomNote, string magazine) 
+    {
+        int m = ransomNote.size();
+        int n = magazine.size();
+
+        unordered_map <char, int> mpp;
+        for(int i = 0; i < m; i++)
+            mpp[ransomNote[i]]++;
+
+        for(int i = 0; i < n; i++)
+            mpp[magazine[i]]--;
+
+        for(auto x: mpp)
+        {
+            if(x.second > 0)
+                return false;
+        }
+        return true;        
+    }
+};
