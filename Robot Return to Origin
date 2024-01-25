@@ -1,0 +1,34 @@
+// Method-1
+class Solution {
+public:
+    bool judgeCircle(string moves) {
+        map<char,int> mp;
+        for (int i = 0; i < moves.size(); i++){
+            mp[moves[i]]++;
+        }
+        return (mp['L'] == mp['R'] && mp['U'] == mp['D']);
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    bool judgeCircle(string moves) {
+        int i = 0, j = 0;
+        for(int k = 0; k < moves.size(); k++){
+            if(moves[k] == 'U'){
+                i++;
+            }
+            else if(moves[k] == 'D'){
+                i--;
+            }
+            else if(moves[k] == 'L'){
+                j++;
+            }
+            else if(moves[k] == 'R'){
+                j--;
+            }
+        }
+        return (i == 0 && j == 0);
+    }
+};
