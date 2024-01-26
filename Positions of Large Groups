@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<vector<int>> largeGroupPositions(string s) {
+        vector<vector<int>> ans;
+        int start = 0, n = s.length(), end;
+        for (end = 0; end < n; ++end) {
+            if (s[end] != s[start]) {
+                if (end - start >= 3) {
+                    ans.push_back({start, end - 1});
+                }
+                start = end;
+            }
+        }
+        if (end-start >= 3) {
+            ans.push_back({start, end - 1});
+        }
+        return ans;
+    }
+};
