@@ -1,0 +1,55 @@
+// Method-1
+class Solution {
+public:
+    vector<string> findOcurrences(string text, string first, string second) {
+        int i, j, k, l;
+        vector<string> ans;
+        string temp="";
+        for(i=0 ; i<text.length() ; i++){
+            if(text[i]==first[0] && (i==0 || text[i-1]==' ')){
+                for(j=0 ; j<first.length() ; j++){
+                    if((i+j)<text.length() && text[i+j]!=first[j])
+                        break;
+                }
+                if(j==first.length()){
+                    for(k=0 ; k<second.length() ; k++){
+                        if((i+j+k+1)<text.length() && text[i+j+1+k]!=second[k])
+                            break;
+                    }
+                    if(k==second.length()){
+                        k=i+j+k+2;
+                        while(k<text.length() && (text[k]!=' ' || k==text.length()-1)){
+                            temp += text[k];
+                            k++;
+                        }
+                        if(temp.length()>0){
+                            ans.push_back(temp);
+                            temp.clear();
+                        }
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    vector<string> findOcurrences(string text, string first, string second) {
+        vector<string> third;
+        stringstream ss(text);
+        string token;
+        vector<string> words;
+        while (getline(ss, token, ' ')) {
+            words.push_back(token);
+        }        
+        for (int i = 0; i < words.size() - 2; ++i) {
+            if (words[i] == first && words[i + 1] == second) {
+                third.push_back(words[i + 2]);
+            }
+        }
+        return third;
+    }
+};
