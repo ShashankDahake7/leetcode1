@@ -1,0 +1,46 @@
+class Solution {
+public:
+    string toGoatLatin(string sentence) {
+        string ans = "";
+        vector<string> p;
+        string pp = "";
+        for(auto x : sentence){
+            if(x == ' '){
+                p.push_back(pp);
+                pp = "";
+            }
+            else{
+                pp = pp + x;
+            }
+        }
+        p.push_back(pp);
+        int t = p.size();
+        int k = 1;
+        for(auto x : p){
+            string y = "";
+            char ch = x[0];
+            if (ch == 'a' || ch == 'e' || ch == 'i' ||  
+        ch == 'o' || ch == 'u' || ch == 'A' ||  
+        ch== 'E' || ch == 'I' || ch == 'O' || ch == 'U') {
+                y = x;
+                y += "ma";
+            }
+            else{
+                for(int i = 1; i < x.size(); i++){
+                    y += x[i];
+                }
+                y += x[0];
+                y += "ma";
+
+            }
+            for(int i = 0; i < k; i++){
+                y += 'a';
+            }
+            k++;
+            if(k <= t)
+            y += " ";
+            ans += y;
+        }
+        return ans;
+    }
+};
