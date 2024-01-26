@@ -7,7 +7,7 @@ public:
                 count++;
             }
         }
-        if(count >= 3){
+        if(count == 3){
             return true;
         }
         return false;
