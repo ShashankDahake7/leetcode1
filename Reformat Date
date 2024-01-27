@@ -1,0 +1,102 @@
+// Method-1
+class Solution {
+public:
+    string reformatDate(string date) {
+        string ans = "";
+        stringstream s(date);
+        string word;
+        vector<string> vec;
+        while (s >> word) {
+            vec.push_back(word);
+        }
+        ans = vec[2];
+        ans += "-";
+        string temp = "";
+        temp = vec[1][0];
+        temp += vec[1][1];
+        temp += vec[1][2];
+        if (temp == "Jan") {
+            ans += "01-";
+        } else if (temp == "Feb") {
+            ans += "02-";
+        } else if (temp == "Mar") {
+            ans += "03-";
+        } else if (temp == "Apr") {
+            ans += "04-";
+        } else if (temp == "May") {
+            ans += "05-";
+        } else if (temp == "Jun") {
+            ans += "06-";
+        } else if (temp == "Jul") {
+            ans += "07-";
+        } else if (temp == "Aug") {
+            ans += "08-";
+        } else if (temp == "Sep") {
+            ans += "09-";
+        } else if (temp == "Oct") {
+            ans += "10-";
+        } else if (temp == "Nov") {
+            ans += "11-";
+        } else
+            ans += "12-";
+        if (isdigit(vec[0][1])) {
+            ans += vec[0][0];
+            ans += vec[0][1];
+        } else {
+            ans += "0";
+            ans += vec[0][0];
+        }
+        return ans;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    string reformatDate(string date) {
+        string ans = "";
+        vector<string> month = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        ans += date[date.size() - 4];
+        ans += date[date.size() - 3];
+        ans += date[date.size() - 2];
+        ans += date[date.size() - 1];
+        ans += "-";
+        string m = "";
+        m += date[date.size() - 8];
+        m += date[date.size() - 7];
+        m += date[date.size() - 6];
+        int mon = 0;
+        for (int i = 0; i < month.size(); i++) {
+            if (m == month[i]) {
+                mon = i;
+                break;
+            }
+        }
+        if (to_string(mon + 1).size() > 1)
+            ans += to_string(mon + 1);
+        else {
+            ans += "0";
+            ans += to_string(mon + 1);
+        }
+        ans += "-";
+        m.clear();
+        for (int i = 0; i < date.size(); i++) {
+            if (date[i] == '0' || date[i] == '1' || date[i] == '2' ||
+                date[i] == '3' || date[i] == '4' || date[i] == '5' ||
+                date[i] == '6' || date[i] == '7' || date[i] == '8' ||
+                date[i] == '9') {
+                m += date[i];
+            } else {
+                break;
+            }
+        }
+        if (m.size() > 1)
+            ans += m;
+        else {
+            ans += "0";
+            ans += m;
+        }
+        return ans;
+    }
+};
