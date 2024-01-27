@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int isPrefixOfWord(string sentence, string searchWord) {
+        int n = searchWord.size();
+        stringstream ss(sentence);
+        string word;
+        int ans = 1;
+        bool found = false;
+        while (ss >> word) {
+            if (word.substr(0, n) == searchWord) {
+                found = true;
+                break;
+            }
+            ans++;
+        }
+        return ((found) ? ans : -1);
+    }
+};
