@@ -1,0 +1,44 @@
+class Solution {
+public:
+    string reformat(string s) {
+        int alpha_len = 0;
+        int digit_len = 0;
+        string alphaStr = "";
+        string digitStr = "";
+        for (int i = 0; i < s.length(); i++) {
+            if (s[i] >= 'a' && s[i] <= 'z')
+                alphaStr = alphaStr + s[i];
+            else if (s[i] >= '0' && s[i] <= '9')
+                digitStr = digitStr + s[i];
+        }
+        alpha_len = alphaStr.length();
+        digit_len = digitStr.length();
+        if (abs(alpha_len - digit_len) > 1)
+            return "";
+        if (alpha_len > digit_len) {
+            int i = 0;
+            int j = 0;
+            string ans = "";
+            while (i < alpha_len && j < digit_len) {
+                ans = ans + alphaStr[i] + digitStr[j];
+                i++;
+                j++;
+            }
+            ans = ans + alphaStr[i];
+            return ans;
+        }
+        else {
+            int i = 0;
+            int j = 0;
+            string ans = "";
+            while (i < digit_len && j < alpha_len) {
+                ans = ans + digitStr[i] + alphaStr[j];
+                i++;
+                j++;
+            }
+            if (digit_len != alpha_len)
+                ans = ans + digitStr[i];
+            return ans;
+        }
+    }
+};
