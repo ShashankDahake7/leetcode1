@@ -1,0 +1,40 @@
+// Method-1
+class Solution {
+public:
+    int minTimeToType(string word) {
+        unordered_map<char, int> m;
+        int k = 0;
+        for (char x = 'a'; x <= 'z'; x++) {
+            m[x] = k;
+            k++;
+        }
+        int ans = 0;
+        int t = abs(m['a'] - m[word[0]]);
+        ans = ans + min(t, 26 - t) + 1;
+        for (int i = 1; i < word.length(); i++) {
+            int t = abs(m[word[i - 1]] - m[word[i]]);
+            ans = ans + min(t, 26 - t) + 1;
+        }
+        return ans;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int minTimeToType(string word) {
+        int ans = 0;
+        // taking the first starting point in integer
+        int start = (int)'a';
+        for (int i = 0; i < word.size(); i++) {
+            int curr = (int)word[i];
+            // 2 possibilities for minimum difference
+            ans += min(abs(start - curr), 26 - abs(start - curr));
+            // update the current start element
+            start = curr;
+        }
+        // have to click word.size() times so add that
+        int size = word.size();
+        return ans + size;
+    }
+};
