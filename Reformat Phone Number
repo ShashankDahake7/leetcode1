@@ -1,0 +1,25 @@
+class Solution {
+public:
+    string reformatNumber(string number) {
+        int i, k = 0;
+        string ans = "";
+        for (i = 0; i < number.length(); i++) {
+            if (number[i] != ' ' && number[i] != '-') {
+                k++;
+                ans += number[i];
+                if (k == 3) {
+                    ans += '-';
+                    k = 0;
+                }
+            }
+        }
+        if (k == 0) {
+            ans.erase(ans.begin() + ans.length() - 1);
+        }
+        if (ans[ans.length() - 2] == '-') {
+            ans.insert(ans.begin() + ans.length() - 3, '-');
+            ans.erase(ans.begin() + ans.length() - 2);
+        }
+        return ans;
+    }
+};
