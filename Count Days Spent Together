@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int sumdays[13];
+    int Days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int totalDays(string str) {
+        int month = stoi(str.substr(0, 2)), day = stoi(str.substr(3));
+        return sumdays[month - 1] + day;
+    }
+    int countDaysTogether(string arriveAlice, string leaveAlice, string arriveBob, string leaveBob) {
+        sumdays[0] = 0;
+        for (int i = 1; i <= 12; i++) {
+            sumdays[i] = sumdays[i - 1] + Days[i - 1];
+        }
+        int arrival = max(totalDays(arriveAlice), totalDays(arriveBob));
+        int departure = min(totalDays(leaveAlice), totalDays(leaveBob));
+        int ans = departure - arrival + 1;
+        return max(0, ans);
+    }
+};
