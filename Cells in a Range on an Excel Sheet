@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<string> cellsInRange(string s) {
+        vector<string> v;
+        char st = s[0], en = s[3];
+        int si = s[1] - 48, end = s[4] - 48;
+        for (char c = st; c <= en; c++) {
+            for (int i = si; i <= end; i++) {
+                string s = "";
+                s = s + c + to_string(i);
+                v.push_back(s);
+            }
+        }
+        return v;
+    }
+};
