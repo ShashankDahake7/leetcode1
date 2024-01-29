@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int convertTime(string& current,string& correct) {
+        int hours1 = stoi(current.substr(0, 2)), hours2 = stoi(correct.substr(0, 2));
+        int min1 = stoi(current.substr(3, 2)), min2 = stoi(correct.substr(3, 2));
+        int diffHours = hours2 - hours1, diffMins = min2 - min1;
+        int totalMins = abs(diffHours * 60 + diffMins);
+        int count = 0;
+        while (totalMins > 0) {
+            if (totalMins >= 60) {
+                count += totalMins / 60;
+                totalMins %= 60;
+            } else if (totalMins >= 15) {
+                count++;
+                totalMins -= 15;
+            } else if (totalMins >= 5) {
+                count++;
+                totalMins -= 5;
+            } else if (totalMins >= 1) {
+                count++;
+                totalMins--;
+            }
+        }
+        return count;
+    }
+};
