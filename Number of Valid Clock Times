@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int countTime(string time) {
+        int choice = 1;
+        // For Hours
+        if (time[0] == '?' && time[1] == '?') {
+            choice *= 24; // 0 ---> 23
+        }
+        // For h1
+        else if (time[0] == '?' && time[1] <= '3') {
+            choice *= 3; // 0,1,2
+        }
+        else if (time[0] == '?' && time[1] > '3') {
+            choice *= 2; // 0,1
+        }
+        // For h2
+        if (time[1] == '?' && (time[0] == '0' || time[0] == '1')) {
+            choice *= 10; // 0 ---> 9
+        }
+        if (time[1] == '?' && time[0] == '2') {
+            choice *= 4; // 0,1,2,3
+        }
+        // For Minutes
+        if (time[3] == '?' && time[4] == '?') {
+            choice *= 60; // 0 ----> 59
+        }
+        // For m1
+        else if (time[3] == '?' && time[4] != '?') {
+            choice *= 6; // 0,1,2,3,4,5
+        }
+        else if (time[3] != '?' && time[4] == '?') {
+            choice *= 10; // 0 ---> 9
+        }
+        return choice;
+    }
+};
