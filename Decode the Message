@@ -1,0 +1,21 @@
+class Solution {
+public:
+    string decodeMessage(string key, string message) {
+        int table[26] = {0};
+        int index = 0;
+        for (int i = 0; i < key.length(); i++) {
+            if (key[i] != ' ' && table[key[i] - 'a'] == 0) {
+                table[key[i] - 'a'] = 97 + index;
+                index++;
+            }
+        }
+        for (int i = 0; i < message.length(); i++) {
+            if (message[i] != ' ') {
+                int value = message[i] - 97;
+                char v = table[value];
+                message[i] = v;
+            }
+        }
+        return message;
+    }
+};
