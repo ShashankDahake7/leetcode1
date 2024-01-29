@@ -1,0 +1,17 @@
+string greatestLetter(string s) {
+    string ans = "";
+    pair<bool, bool> cnt[26];
+    for (auto i : s) {
+        char up = toupper(i), lw = tolower(i);
+        if (islower(i)) {
+            cnt[lw - 'a'].first = true;
+        }
+        else {
+            cnt[lw - 'a'].second = true;
+        }
+        if (cnt[lw - 'a'].first and cnt[lw - 'a'].second) {
+            ans = max(ans, {up});
+        }
+    }
+    return ans;
+}
