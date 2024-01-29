@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool canBeEqual(string s1, string s2) {
+        // Check if the input strings are already equal.
+        if (s1 == s2) {
+            return true;
+        }
+        // Iterate through the first 4 characters of the strings.
+        for (int i = 0; i < 4; i++) {
+            // If the characters at the current position are not equal:
+            if (s1[i] != s2[i]) {
+                // Check if swapping the current character and the character two
+                // positions ahead (i+2) in s1 would make the strings equal.
+                // This condition is used to prevent accessing out-of-bounds
+                // characters in the string.
+                if (i + 2 >= 4) {
+                    return false;
+                }
+                // Swap the characters in s1.
+                swap(s1[i], s1[i + 2]);
+            }
+        }
+        // Check if the modified s1 string is now equal to s2.
+        return s1 == s2;
+    }
+};
