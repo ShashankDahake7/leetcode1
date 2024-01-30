@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int largestInteger(int num) {
+        string a = to_string(num);
+        vector<char> odd, even;
+        for (int i = 0; i < a.size(); i++) {
+            if ((a[i] - '0') % 2 == 0) {
+                even.push_back(a[i]);
+            } 
+            else {
+                odd.push_back(a[i]);
+            }
+        }
+        sort(odd.begin(), odd.end(), greater<int>());
+        sort(even.begin(), even.end(), greater<int>());
+        int j = 0, k = 0;
+        for (int i = 0; i < a.size(); i++) {
+            if ((a[i] - '0') % 2 == 0) {
+                a[i] = even[j];
+                j++;
+            } else {
+                a[i] = odd[k];
+                k++;
+            }
+        }
+        return stoi(a);
+    }
+};
