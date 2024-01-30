@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int minMaxDifference(int n) {
+        vector<int> v;
+        vector<int> vt;
+        while (n > 0) {
+            // pushing at begining
+            v.insert(v.begin(), n % 10);
+            vt.insert(vt.begin(), n % 10);
+            n = n / 10;
+        }
+        int temp = 0;
+        // maximising
+        for (int i = 0; i < v.size(); i++) {
+            // do nothing if 9 is there
+            if (v[i] == 9)
+                continue;
+            else if (v[i] != 9) {
+                // break we don't need to go further
+                temp = v[i];
+                break;
+            }
+        }
+        for (int i = 0; i < v.size(); i++) {
+            if (temp == v[i]) {
+                v[i] = 9;
+            }
+        }
+        // minimising by replacing wiht 0
+        int temp2 = vt[0];
+        for (int i = 0; i < vt.size(); i++) {
+            if (temp2 == vt[i]) {
+                vt[i] = 0;
+            }
+        }
+        // converting vector of numbers into number
+        int max = 0, min = 0;
+        for (int i = 0; i < v.size(); i++)
+            max = max * 10 + v[i];
+
+        int num2 = 0;
+        for (int i = 0; i < vt.size(); i++)
+            min = min * 10 + vt[i];
+
+        return max - min;
+    }
+};
