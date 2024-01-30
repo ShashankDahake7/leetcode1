@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int distMoney(int money, int children) {
+        // case-1 : If money less than children then it can't satisfy the rule
+        if (money < (children)) {
+            return -1;
+        }
+        // case-2 : Satisfy 3 rules But It needs extra 7 dollars to donate 8 dollars to a children
+        if (money < (children + 7)) {
+            return 0;
+        }
+        // Max is for calculating how many chidren we can support
+        int max = (money - children) / 7;
+        float k = float(money) / (8 * children);
+        // Here k is used if amount is greater than (8*children) then we can only distribute upto (children -1)
+        if (k > 1) {
+            return children - 1;
+        }
+        // we can distribute all children if money is == (8*children)
+        else if (k == 1) {
+            return children;
+        }
+        // here money <(8*children) so we need to check if any last child gets 4 then we need to distribute a 8 into < 8 or > 8
+        else {
+            if ((money - 8 * (children - 1)) == 4) {
+                return max - 1;
+            }
+            // if not no problem
+            else {
+                return max;
+            }
+        }
+    }
+};
