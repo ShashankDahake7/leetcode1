@@ -1,0 +1,38 @@
+/*
+
+    Time Complexity: O(N)
+    Space Complexity: O(1),
+
+    Where N is the size of string 'STR'.
+
+*/
+
+bool validAbbreviation (string &str, string &abbr) {
+    int ptr1 = 0;
+    int ptr2 = 0;
+
+    while (ptr1 < str.size() and ptr2 < abbr.size()) {
+        // If charcters in both string match.
+        if (str[ptr1] == abbr[ptr2]) {
+            ptr2 += 1;
+            ptr1 += 1;
+            continue;
+        }
+
+        // If chracter in abbr is an alphabet but does not match in earlier step.
+        if (abbr[ptr2] <= '0' or abbr[ptr2] > '9') {
+            return false;
+        }
+
+        // Finding the number from digits
+        int count = 0;
+        while (ptr2 < abbr.size() and abbr[ptr2] <= '9' and abbr[ptr2] >= '0') {
+            count = count * 10 + (abbr[ptr2] - '0');
+            ptr2 += 1;
+        }
+
+        ptr1 += count;
+    }
+
+    return ptr1 == str.size() and ptr2 == abbr.size();
+}
