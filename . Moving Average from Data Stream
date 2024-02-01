@@ -1,0 +1,18 @@
+class MovingAverage {
+private:
+    int size;
+    vector<int> queue;
+public:
+    MovingAverage(int size) : size(size) {}
+    double next(int val) {
+        queue.push_back(val);
+        // Calculate the sum of the moving window
+        int windowSum = 0;
+        int queueSize = queue.size();
+        int start = max(0, queueSize - size);
+        for (int i = start; i < queueSize; ++i) {
+            windowSum += queue[i];
+        }
+        return static_cast<double>(windowSum) / min(queueSize, size);
+    }
+};
