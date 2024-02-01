@@ -1,0 +1,20 @@
+class Logger {
+private:
+    unordered_map<string, int> map; // msg : last print timestamp
+    int limiter = 10;
+public:
+    Logger() {}
+    bool shouldPrintMessage(int timestamp, string message) {
+        if (map.find(message) == map.end()) {
+            map[message] = timestamp;
+            return true;
+        } 
+        else {
+            if (timestamp - map[message] >= limiter) {
+                map[message] = timestamp;
+                return true;
+            }
+        }
+        return false;
+    }
+};
