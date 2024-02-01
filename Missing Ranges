@@ -1,0 +1,33 @@
+class Solution {
+public:
+    string getRange(long long n1, long long n2) {
+        return n1 == n2 ? to_string(n1) : to_string(n1) + "->" + to_string(n2);
+    }
+    vector<string> findMissingRanges(vector<int>& nums, int lower, int upper) {
+        vector<string> res;
+        long long next = lower; // Use long long to avoid overflow
+        for (int i = 0; i < nums.size(); i++) {
+            // 1. We don't need to add [INT_MAX, ...] to result
+            if (lower == INT_MAX) {
+                return res;
+            }
+            if (nums[i] < next) {
+                continue;
+            }
+            if (nums[i] == next) {
+                next++;
+                continue;
+            }
+            res.push_back(getRange(next, nums[i] - 1));
+            // 2. We don't need to proceed after we have process INT_MAX in array
+            if (nums[i] == INT_MAX) {
+                return res;
+            }
+            next = (long long)nums[i] + 1;
+        }
+        if (next <= upper) {
+            res.push_back(getRange(next, upper));
+        }
+        return res;
+    }
+};
