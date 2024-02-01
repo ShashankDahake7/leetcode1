@@ -1,0 +1,28 @@
+class TwoSum {
+    unordered_map<long, int> numCountMap;
+public:
+    TwoSum() {}
+    // Function to add numbers into the data structure
+    void add(int num) {
+        numCountMap[num]++;
+    }
+    // Function to find if there exists any pair of numbers which sum is equal to the given value
+    bool find(int target) {
+        for (auto& pair : numCountMap) {
+            long num = pair.first;
+            int count = pair.second;
+            long complement = target - num;
+            if (complement != num) {
+                if (numCountMap.find(complement) != numCountMap.end()) {
+                    return true;
+                }
+            } 
+            else {
+                if (count > 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
