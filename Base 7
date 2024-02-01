@@ -1,0 +1,13 @@
+class Solution {
+public:
+    string convertToBase7(int num) {
+        int ans = 0, i = 0;
+        while (num != 0) {
+            int r = num % 7;
+            ans = ans + r * pow(10, i);
+            i++;
+            num /= 7;
+        }
+        return to_string(ans);
+    }
+};
