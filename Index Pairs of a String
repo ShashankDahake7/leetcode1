@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+vector<vector<int>> indexPairs(string text, vector<string>& words) {
+    vector<vector<int>> result;
+    for (const string& word : words) {
+        size_t pos = text.find(word);
+        while (pos != string::npos) {
+            result.push_back({static_cast<int>(pos), static_cast<int>(pos + word.length() - 1)});
+            pos = text.find(word, pos + 1);
+        }
+    }
+    sort(result.begin(), result.end());
+    return result;
+}
+int main() {
+    string text1 = "thestoryofleetcodeandme";
+    vector<string> words1 = {"story","fleet","leetcode"};
+    vector<vector<int>> pairs1 = indexPairs(text1, words1);
+    cout << "Example 1 output:" << endl;
+    for (const auto& pair : pairs1) {
+        cout << "[" << pair[0] << "," << pair[1] << "]" << endl;
+    }
+    string text2 = "ababa";
+    vector<string> words2 = {"aba","ab"};
+    vector<vector<int>> pairs2 = indexPairs(text2, words2);
+    cout << "\nExample 2 output:" << endl;
+    for (const auto& pair : pairs2) {
+        cout << "[" << pair[0] << "," << pair[1] << "]" << endl;
+    }
+    return 0;
+}
