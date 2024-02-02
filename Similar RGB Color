@@ -1,0 +1,14 @@
+class Solution {
+public:
+    string f(string x) {
+        int q = stoi(x, NULL, 16);
+        q = q / 17 + (q % 17 > 8 ? 1 : 0);
+        stringstream ss;
+        ss << setfill('0') << setw(2) << hex << 17 * q;
+        return ss.str();
+    }
+    string similarRGB(string color) {
+        string a = color.substr(1, 2), b = color.substr(3, 2), c = color.substr(5, 2);
+        return "#" + f(a) + f(b) + f(c);
+    }
+};
