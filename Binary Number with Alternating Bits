@@ -1,0 +1,43 @@
+// Method-1
+class Solution {
+public:
+    bool hasAlternatingBits(int n) {
+        int prevBit = n & 1;
+        n >>= 1;
+        while (n > 0) {
+            int currentBit = n & 1;
+            if (currentBit == prevBit) {
+                return false;
+            }
+            prevBit = currentBit;
+            n >>= 1;
+        }
+        return true;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    bool hasAlternatingBits(int n) {
+        string num = Binary(n);
+        for (int i = 0; i < num.size() - 1; i++) {
+            char next = num[i];
+            char prev = num[i + 1];
+            if (next == prev) {
+                return false;
+            }
+        }
+        return true;
+    }
+    string Binary(int n) {
+        string binary;
+        while (n > 0) {
+            int temp = n % 2;
+            binary.push_back('0' + temp);
+            n /= 2;
+        }
+        reverse(binary.begin(), binary.end());
+        return binary;
+    }
+};
