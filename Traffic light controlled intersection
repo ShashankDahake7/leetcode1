@@ -1,0 +1,39 @@
+#include <iostream>
+#include <mutex>
+#include <functional>
+#include <thread>
+class TrafficLight {
+private:
+    int road = 1;
+    std::mutex mtx;
+public:
+    TrafficLight() {}
+    void carArrived(int carId, // ID of the car
+        int roadId, // ID of the road the car travels on. Can be 1 (road A) or 2 (road B)
+        int direction, // Direction of the car
+        std::function<void()> turnGreen, // Use turnGreen() to turn light to green on current road
+        std::function<void()> crossCar // Use crossCar() to make car cross the intersection
+    ) {
+        std::lock_guard<std::mutex> lock(mtx);
+        if (roadId != road) {
+            turnGreen();
+            road = roadId;
+        }
+        crossCar();
+    }
+};
+int main() {
+    TrafficLight tl;
+    // Example usage
+    auto turnGreen = []() {
+        std::cout << "Turning light to green..." << std::endl;
+        // Implementation to turn light to green
+    };
+    auto crossCar = []() {
+        std::cout << "Car is crossing the intersection..." << std::endl;
+        // Implementation for car to cross intersection
+    };
+    tl.carArrived(1, 1, 1, turnGreen, crossCar); // Example call for a car arriving on road 1
+    tl.carArrived(2, 2, 2, turnGreen, crossCar); // Example call for a car arriving on road 2
+    return 0;
+}
