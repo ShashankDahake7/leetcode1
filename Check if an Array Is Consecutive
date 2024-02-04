@@ -1,0 +1,30 @@
+// Method-1
+class Solution {
+public:
+    bool isConsecutive(vector<int>& A) {
+        sort(begin(A), end(A));
+        for (int i = 1; i < A.size(); ++i) {
+            if (A[i] != A[i - 1] + 1) {
+                return false;
+            }
+        }
+        return  true;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    bool isConsecutive(vector<int>& A) {
+        int mn = *min_element(begin(A), end(A));
+        vector<bool> seen(A.size());
+        for (int n : A) {
+            n -= mn;
+            if (n < 0 || n >= A.size() || seen[n]) {
+                return false;
+            }
+            seen[n] = true;
+        }
+        return true;
+    }
+};
