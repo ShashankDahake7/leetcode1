@@ -1,0 +1,36 @@
+// Method-1
+class Solution {
+public:
+    int distributeCandies(int n, int limit) {
+        int count = 0;
+        for (int i = 0; i <= limit; i++) {
+            for (int j = 0; j <= limit; j++) {
+                for (int k = 0; k <= limit; k++) {
+                    if (i + j + k == n) {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int solve(int child, int n, int limit) {
+        if (n == 0 && child == 0)
+            return 1;
+        if (n < 0 || child == 0)
+            return 0;
+        int ans = 0;
+        for (int i = 0; i <= min(limit, n); i++) {
+            ans += solve(child - 1, n - i, limit);
+        }
+        return ans;
+    }
+    int distributeCandies(int n, int limit) { 
+        return solve(3, n, limit);
+    }
+};
