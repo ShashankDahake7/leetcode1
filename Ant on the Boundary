@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int returnToBoundaryCount(vector<int>& v) {
+        int sum = 0, count = 0;
+        for (auto i : v) {
+            sum += i;
+            if (sum == 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+};
