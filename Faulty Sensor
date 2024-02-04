@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int badSensor(vector<int>& sensor1, vector<int>& sensor2) {
+        int n = sensor1.size();
+        int i = 0;
+        // Check for matching readings
+        while (i < n - 1 && sensor1[i] == sensor2[i]) {
+            ++i;
+        }
+        // Check for differences after the first difference is found
+        while (i < n - 1) {
+            if (sensor1[i + 1] != sensor2[i]) {
+                return 1;
+            }
+            if (sensor1[i] != sensor2[i + 1]) {
+                return 2;
+            }
+            ++i;
+        }
+        // If no differences found
+        return -1;
+    }
+};
