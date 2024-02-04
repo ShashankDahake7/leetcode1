@@ -1,0 +1,62 @@
+// Method-1
+class Solution {
+public:
+    bool check(unordered_map<int, vector<int>>& m, int source, int destination, vector<bool>& visited) {
+        if (source == destination) {
+            return true;
+        }
+        if (visited[source] == true) {
+            return false;
+        }
+        visited[source] = true;
+        for (auto& node : m[source]) {
+            if (check(m, node, destination, visited) == true) {
+                return true;
+            }
+        }
+        return false;
+    }
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+        unordered_map<int, vector<int>> m;
+        for (vector<int>& edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            m[u].push_back(v);
+            m[v].push_back(u);
+        }
+        vector<bool> visited(n, false);
+        return check(m, source, destination, visited);
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    vector<vector<bool>> visited;
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+        // form adjacency matrix
+        unordered_map<int, vector<int>> mp;
+        for (int i = 0; i < edges.size(); i++) {
+            mp[edges[i][0]].push_back(edges[i][1]);
+            mp[edges[i][1]].push_back(edges[i][0]);
+        }
+        queue<int> que;
+        vector<bool> vis(n, 0);
+        que.push(source);
+        vis[source] = 1;
+        while (!que.empty()) {
+            int val = que.front();
+            que.pop();
+            if (val == destination) {
+                return true;
+            }
+            for (int x : mp[val]) {
+                if (!vis[x]) {
+                    vis[x] = 1;
+                    que.push(x);
+                }
+            }
+        }
+        return false;
+    }
+};
