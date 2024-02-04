@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<int> largestSubarray(vector<int>& A, int k) {
+        int maxIdx = 0, maxVal = A[0];
+        // Find the index of the maximum element in the initial subarray of size k
+        for (int i = 1; i < k; ++i) {
+            if (A[i] > maxVal) {
+                maxVal = A[i];
+                maxIdx = i;
+            }
+        }
+        // Update maxIdx to the index of the maximum element in all subsequent subarrays of size k
+        for (int i = k; i < A.size(); ++i) {
+            if (A[i] > maxVal) {
+                maxVal = A[i];
+                maxIdx = i - k + 1;
+            }
+        }
+        vector<int> result(A.begin() + maxIdx, A.begin() + maxIdx + k);
+        return result;
+    }
+};
