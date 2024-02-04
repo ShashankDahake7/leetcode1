@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int totalMoney(int n) {
+        if (n < 8) {
+            return (n * (1 + n) / 2);
+        }
+        int initialMoneyInFirstWeek = 28;
+        int fullWeeks = n / 7;
+        int remainingDays = n - fullWeeks * 7;
+        int totalMoneyInFullWeeks = initialMoneyInFirstWeek * fullWeeks + 7 * (fullWeeks * (fullWeeks - 1)) / 2;
+        int totalMoneyInPartialWeek = (2 * fullWeeks + remainingDays + 1) * remainingDays / 2;
+        return totalMoneyInFullWeeks + totalMoneyInPartialWeek;
+    }
+};
