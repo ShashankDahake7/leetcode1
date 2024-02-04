@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        unordered_map<char, int> mp;
+        int i = 0, j = 0;
+        for (char ch : t) {
+            mp[ch]++;
+        }
+        int req_ct = t.size();
+        int start_i;
+        int currWindowSize, minWindowSize = INT_MAX;
+        while (j < s.size()) {
+            if (mp[s[j]] > 0) {
+                // requirement fulfilled now
+                req_ct--;
+            }
+            mp[s[j]]--;
+            while (req_ct == 0) {
+                // start shrinking
+                currWindowSize = j - i + 1;
+                // update the answer
+                if (currWindowSize < minWindowSize) {
+                    minWindowSize = currWindowSize;
+                    start_i = i;
+                }
+                mp[s[i]]++;
+                if (mp[s[i]] > 0) {
+                    req_ct++;
+                }
+                i++;
+            }
+            j++;
+        }
+        return minWindowSize == INT_MAX ? "" : s.substr(start_i, minWindowSize);
+    }
+};
