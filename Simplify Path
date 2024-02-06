@@ -1,0 +1,61 @@
+// Method-1
+class Solution {
+public:
+    string simplifyPath(string path) {
+        string res, s;
+        stack<string> stk;
+        stringstream ss(path);
+        while (getline(ss, s, '/')) {
+            if (s == "" || s == ".")
+                continue;
+            if (s == ".." && !stk.empty())
+                stk.pop();
+            else if (s != "..")
+                stk.push(s);
+        }
+        while (!stk.empty()) {
+            res = "/" + stk.top() + res;
+            stk.pop();
+        }
+        return res.empty() ? "/" : res;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    string simplifyPath(string path) {
+        stack<string> st; // Stack is going to store folders
+        string ans = "";  // Answer path
+        // Traversing through string
+        for (int i = 0; i < path.length(); i++) {
+            // We always going to ignore '/'
+            if (path[i] == '/') {
+                continue;
+            }
+            string temp = ""; // We are gonna store folder names in temp
+            while (i < path.length() && path[i] != '/') { // To store names we use this while loop
+                temp += path[i];
+                i++;
+            }
+            if (temp == ".")
+                continue; // If we get a single '.' then there is no need of pushing in stamp
+            // This means that we have to go up in path
+            else if (temp == "..") {
+                if (!st.empty())
+                    st.pop(); // To go up we have to pop
+            } 
+            else {
+                st.push(temp); // If we get no . or .. that means we got the name of the folder
+            }
+        }
+        if (st.empty())
+            ans = '/'; // If there is nothing in our stack then we just need to return /;
+        // If we have something in stack then we have to give in this order "/home/xyz/abc" etc For that I am using this
+        while (!st.empty()) {
+            ans = '/' + st.top() + ans;
+            st.pop();
+        }
+        return ans; // Returning the resulting string
+    }
+};
