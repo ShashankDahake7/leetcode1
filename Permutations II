@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void solve(vector<int> num, int index, vector<vector<int>>& ans) {
+        if (index == num.size() - 1) {
+            ans.push_back(num);
+            return;
+        }
+        for (int k = index; k < num.size(); k++) {
+            if (index != k && num[index] == num[k]) {
+                continue;
+            }
+            swap(num[index], num[k]);
+            solve(num, index + 1, ans);
+        }
+    }
+    vector<vector<int>> permuteUnique(vector<int>& num) {
+        sort(num.begin(), num.end());
+        vector<vector<int>> ans;
+        int index = 0;
+        solve(num, index, ans);
+        return ans;
+    }
+};
