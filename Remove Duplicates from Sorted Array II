@@ -1,0 +1,34 @@
+// Method-1
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int k = 0;
+        map<int, int> mp;
+        for (auto it : nums) {
+            mp[it]++;
+            if (mp[it] <= 2) {
+                nums[k++] = it;
+            }
+        }
+        return k;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        if (nums.size() <= 2) {
+            return nums.size();
+        }
+        // here k is the index which is compared to the nums[i] for checking that the current element is occuring more than two times or not
+        int k = 0; 
+        for (int i = 2; i < nums.size(); i++) {
+            if (nums[i] != nums[k]) {
+                nums[k + 2] = nums[i];
+                k++;
+            }
+        }
+        return k + 2;
+    }
+};
