@@ -1,0 +1,66 @@
+// Method-1
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        vector<vector<int>> matrix(n, vector<int>(n));
+        int num = 1;
+        int row = 0;
+        int col = 0;
+        int direction = 0;
+        vector<int> dr = {0, 1, 0, -1};
+        vector<int> dc = {1, 0, -1, 0};
+        while (num <= n * n) {
+            matrix[row][col] = num;
+            num++;
+            int nextRow = row + dr[direction];
+            int nextCol = col + dc[direction];
+            if (nextRow < 0 || nextRow >= n || nextCol < 0 || nextCol >= n ||
+                matrix[nextRow][nextCol] != 0) {
+                direction = (direction + 1) % 4;
+            }
+            row += dr[direction];
+            col += dc[direction];
+        }
+        return matrix;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        vector<vector<int>> matrix(n, vector<int>(n));
+        int top = 0;
+        int bottom = n - 1;
+        int left = 0;
+        int right = n - 1;
+        int num = 1;
+        while (top <= bottom && left <= right) {
+            for (int i = left; i <= right; i++) {
+                matrix[top][i] = num;
+                num++;
+            }
+            top++;
+            for (int i = top; i <= bottom; i++) {
+                matrix[i][right] = num;
+                num++;
+            }
+            right--;
+            if (top <= bottom) {
+                for (int i = right; i >= left; i--) {
+                    matrix[bottom][i] = num;
+                    num++;
+                }
+                bottom--;
+            }
+            if (left <= right) {
+                for (int i = bottom; i >= top; i--) {
+                    matrix[i][left] = num;
+                    num++;
+                }
+                left++;
+            }
+        }
+        return matrix;
+    }
+};
