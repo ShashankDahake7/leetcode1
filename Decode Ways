@@ -1,0 +1,72 @@
+// Recursion
+class Solution {
+public:
+    int numDecodingsRecursive(string s, int index) {
+        if (index == s.length()) {
+            return 1;
+        }
+        if (s[index] == '0') {
+            return 0;
+        }
+        int ways = numDecodingsRecursive(s, index + 1);
+        if (index + 1 < s.length() && (s[index] == '1' || (s[index] == '2' && s[index + 1] <= '6'))) {
+            ways += numDecodingsRecursive(s, index + 2);
+        }
+        return ways;
+    }
+    int numDecodings(string s) {
+        return numDecodingsRecursive(s, 0);
+    }
+};
+
+// Top-Down
+class Solution {
+public:
+    int numDecodingsTopDown(string s, int index, vector<int>& memo) {
+        if (index == s.length()) {
+            return 1;
+        }
+        if (s[index] == '0') {
+            return 0;
+        }
+        if (memo[index] != -1) {
+            return memo[index];
+        }
+        int ways = numDecodingsTopDown(s, index + 1, memo);
+        if (index + 1 < s.length() && (s[index] == '1' || (s[index] == '2' && s[index + 1] <= '6'))) {
+            ways += numDecodingsTopDown(s, index + 2, memo);
+        }
+        memo[index] = ways;
+        return ways;
+    }
+    int numDecodings(string s) {
+        vector<int> memo(s.length(), -1);
+        return numDecodingsTopDown(s, 0, memo);
+    }
+};
+
+// Bottom-Up
+class Solution {
+public:
+    int numDecodings(string s) {
+        int n = s.length();
+        if (n == 0 || s[0] == '0') {
+            return 0;
+        }
+        vector<int> dp(2, 0);
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 1; i < n; ++i) {
+            int ways = 0;
+            if (s[i] != '0') {
+                ways += dp[1];
+            }
+            if (s[i - 1] == '1' || (s[i - 1] == '2' && s[i] <= '6')) {
+                ways += dp[0];
+            }
+            dp[0] = dp[1];
+            dp[1] = ways;
+        }
+        return dp[1];
+    }
+};
