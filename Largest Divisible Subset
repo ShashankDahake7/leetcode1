@@ -1,0 +1,79 @@
+// Method-1
+class Solution {
+public:
+    vector<int> ans;
+    void solve(vector<int>& nums, int ind, vector<int>& temp) {
+        if (ind == nums.size()) {
+            if (temp.size() > ans.size())
+                ans = temp;
+            return;
+        }
+
+        if (temp.size() == 0 or nums[ind] % temp.back() == 0) {
+            temp.push_back(nums[ind]);
+            solve(nums, ind + 1, temp);
+            temp.pop_back();
+        }
+        solve(nums, ind + 1, temp);
+    }
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        vector<int> temp;
+        sort(nums.begin(), nums.end());
+        solve(nums, 0, temp);
+        return ans;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    vector<int> ans;
+    void solve(vector<int>& nums, int i, vector<int>& temp, vector<int>& dp) {
+        if (i == nums.size()) {
+            if (temp.size() > ans.size())
+                ans = temp;
+            return;
+        }
+        if (temp.empty()) {
+            temp.push_back(nums[i]);
+            solve(nums, i + 1, temp, dp);
+            temp.pop_back();
+        } else if ((int)temp.size() > dp[i] && nums[i] % temp.back() == 0) {
+            dp[i] = temp.size();
+            temp.push_back(nums[i]);
+            solve(nums, i + 1, temp, dp);
+            temp.pop_back();
+        }
+        solve(nums, i + 1, temp, dp);
+    }
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        vector<int> temp;
+        vector<int> dp(nums.size() + 1, -1);
+        sort(nums.begin(), nums.end());
+        solve(nums, 0, temp, dp);
+        return ans;
+    }
+};
+
+// Method-3
+class Solution {
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        int maxi = 0;
+        vector<int> dp(n, 1);
+        vector<int> temp(n, -1);
+        vector<int> ans;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++)
+                if (nums[i] % nums[j] == 0 and dp[i] < dp[j] + 1)
+                    dp[i] = dp[j] + 1, temp[i] = j;
+            if (dp[i] > dp[maxi])
+                maxi = i;
+        }
+        for (int i = maxi; i >= 0; i = temp[i])
+            ans.push_back(nums[i]);
+        return ans;
+    }
+};
