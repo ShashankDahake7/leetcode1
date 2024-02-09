@@ -1,0 +1,42 @@
+#include <string>
+#include <unordered_map>
+using namespace std;
+
+class Solution {
+public:
+    string fractionToDecimal(int numerator, int denominator) {
+        // Handling the sign of the result
+        if (numerator == 0)
+            return "0";
+        string result;
+        if (numerator < 0 ^ denominator < 0)
+            result += "-";
+        // Convert to long long to handle overflow
+        long long n = llabs(numerator), d = llabs(denominator), r;
+        // Append the integral part
+        result += to_string(n / d);
+        r = n % d;
+        // If no fractional part, return the result
+        if (r == 0)
+            return result;
+        // Append the decimal point
+        result += ".";
+        // Map to store remainders and their positions
+        unordered_map<long long, int> remainders;
+        // Process the fractional part
+        while (r != 0) {
+            // Check if this remainder has been seen before
+            if (remainders.find(r) != remainders.end()) {
+                result.insert(remainders[r], "(");
+                result += ")";
+                break;
+            }
+            // Store this remainder with its position
+            remainders[r] = result.size();
+            r *= 10;
+            result += to_string(r / d);
+            r %= d;
+        }
+        return result;
+    }
+};
