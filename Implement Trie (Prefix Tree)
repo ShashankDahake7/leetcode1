@@ -1,0 +1,74 @@
+class TrieNode {
+public:
+    // Array to store links to child nodes
+    TrieNode* children[26];
+    // Flag to indicate if the node represents the end of a word
+    bool isWord;
+    TrieNode() {
+        // Initialize all children as NULL
+        for (int i = 0; i < 26; i++) {
+            children[i] = NULL;
+        }
+        // Initialize isWord flag as false
+        isWord = false;
+    }
+};
+
+class Trie {
+public:
+    Trie() {
+        // Initialize the Trie with an empty root node
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* node = root;
+        int curr = 0;
+        for (int i = 0; i < word.size(); i++) {
+            // Calculate the index of the character in the children array
+            curr = word[i] - 'a';
+            // Create a new node if the child does not exist
+            if (node->children[curr] == NULL) {
+                node->children[curr] = new TrieNode();
+            }
+            // Move to the child node
+            node = node->children[curr];
+        }
+        // Mark the last node as the end of the inserted word
+        node->isWord = true;
+    }
+    bool search(string word) {
+        TrieNode* node = root;
+        int curr = 0;
+        for (int i = 0; i < word.size(); i++) {
+            // Calculate the index of the character in the children array
+            curr = word[i] - 'a';
+            // Return false if any character is missing in the trie
+            if (node->children[curr] == NULL) {
+                return false;
+            }
+            // Move to the child node
+            node = node->children[curr];
+        }
+        // Return true if the last node represents the end of a word
+        return node->isWord;
+    }
+    bool startsWith(string prefix) {
+        TrieNode* node = root;
+        int curr = 0;
+        for (int i = 0; i < prefix.size(); i++) {
+            // Calculate the index of the character in the children array
+            curr = prefix[i] - 'a';
+            // Return false if any character is missing in the trie
+            if (node->children[curr] == NULL) {
+                return false;
+            }
+            // Move to the child node
+            node = node->children[curr];
+        }
+        // Return true if the prefix exists in the trie
+        return true;
+    }
+private:
+    // Pointer to the root node of the trie
+    TrieNode* root;
+};
