@@ -1,109 +1,150 @@
 // Recursion
 class Solution {
+    bool isOperator(char ch) { 
+        return (ch == '+' || ch == '-' || ch == '*'); 
+    }
+    vector<int> getDiffWays(int i, int j, string& expression) {
+        // If length of the substring is 1 or 2 we encounter our base case i.e. a number found.
+        int len = j - i + 1;
+        if (len <= 2) {
+            return {stoi(expression.substr(i, len))};
+        }
+        // If it is not a number then it is an expression now we try to evaluate every opertor present in it
+        vector<int> res;
+        for (int ind = i; ind <= j; ind++) {
+            if (isOperator(expression[ind])) {
+                char op = expression[ind];
+                // if char at ind is operator get all results for its left and right substring using recursion
+                vector<int> left = getDiffWays(i, ind - 1, expression);
+                vector<int> right = getDiffWays(ind + 1, j, expression);
+                // try all options for left & right operand and push all results to the answer
+                for (int l : left) {
+                    for (int r : right) {
+                        if (op == '+') {
+                            res.push_back(l + r);
+                        } else if (op == '-') {
+                            res.push_back(l - r);
+                        } else if (op == '*') {
+                            res.push_back(l * r);
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
 public:
     vector<int> diffWaysToCompute(string expression) {
-        vector<int> ans = findWays(expression, 0, expression.length() - 1);
-        return ans;
-    }
-    vector<int> findWays(string expression, int i, int j) {
-        if (checkNoOp(expression.substr(i, j - i + 1))) {
-            vector<int> v;
-            v.push_back(stoi(expression.substr(i, j - i + 1)));
-            return v;
-        }
-        vector<int> val;
-        for (int k = i; k <= j; k++) {
-            char ch = expression[k];
-            if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-                vector<int> l = findWays(expression, i, k - 1);
-                vector<int> r = findWays(expression, k + 1, j);
-                vector<int> v = findValue(l, r, ch);
-                for (int i = 0; i < v.size(); i++)
-                    val.push_back(v[i]);
-            }
-        }
-        return val;
-    }
-    bool checkNoOp(string s) {
-        for (int i = 0; i < s.length(); i++) {
-            if (s[i] == '+' || s[i] == '-' || s[i] == '*' || s[i] == '/')
-                return false;
-        }
-        return true;
-    }
-    vector<int> findValue(vector<int> l, vector<int> r, char op) {
-        vector<int> v;
-        for (int i = 0; i < l.size(); i++) {
-            for (int j = 0; j < r.size(); j++) {
-                if (op == '+')
-                    v.push_back(l[i] + r[j]);
-                else if (op == '-')
-                    v.push_back(l[i] - r[j]);
-                else if (op == '*')
-                    v.push_back(l[i] * r[j]);
-                else if (op == '/')
-                    v.push_back(l[i] / r[j]);
-            }
-        }
-        return v;
+        int n = expression.size();
+        return getDiffWays(0, n - 1, expression);
     }
 };
 
 // Top-Down
 class Solution {
+    bool isOperator(char ch) {
+        return (ch == '+' || ch == '-' || ch == '*');
+    }
+    vector<int> getDiffWays(int i, int j, vector<vector<vector<int>>>& dp, string& expression) {
+        // Return cached result if already calculated
+        if(!dp[i][j].empty()) {
+            return dp[i][j];
+        }
+        
+        // If length of the substring is 1 or 2 we encounter our base case i.e. a number found.
+        int len = j - i + 1;
+        if(len <= 2) {
+            return dp[i][j] = { stoi(expression.substr(i, len)) };
+        }
+        // If it is not a number then it is an expression now we try to evaluate every opertor present in it
+        vector<int> res;
+        for(int ind = i; ind <= j; ind++) {
+            if(isOperator(expression[ind])) {
+                char op = expression[ind];
+                // if char at ind is operator get all results for its left and right substring using recursion
+                vector<int> left = getDiffWays(i, ind - 1, dp, expression);
+                vector<int> right = getDiffWays(ind + 1, j, dp, expression);
+                // try all options for left & right operand and push all results to the answer
+                for(int l : left) {
+                    for(int r : right) {
+                        if(op == '+') {
+                            res.push_back(l + r);
+                        }
+                        else if(op == '-') {
+                            res.push_back(l - r);
+                        }
+                        else if(op == '*') {
+                            res.push_back(l * r);
+                        }
+                    }
+                }
+            }
+        }
+        return dp[i][j] = res;
+    }
 public:
     vector<int> diffWaysToCompute(string expression) {
-        unordered_map<string, vector<int>> memo;
-        return findWays(expression, 0, expression.length() - 1, memo);
+        int n = expression.size();
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(n));
+        return getDiffWays(0, n - 1, dp, expression);
     }
-    vector<int> findWays(string expression, int i, int j, unordered_map<string, vector<int>>& memo) {
-        string subexpr = expression.substr(i, j - i + 1);
-        if (memo.find(subexpr) != memo.end()) {
-            return memo[subexpr];
-        }
-        if (checkNoOp(subexpr)) {
-            vector<int> v;
-            v.push_back(stoi(subexpr));
-            // Memoize the result
-            memo[subexpr] = v;
-            return v;
-        }
-        vector<int> val;
-        for (int k = i; k <= j; k++) {
-            char ch = expression[k];
-            if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-                vector<int> l = findWays(expression, i, k - 1, memo);
-                vector<int> r = findWays(expression, k + 1, j, memo);
-                vector<int> v = findValue(l, r, ch);
-                for (int i = 0; i < v.size(); i++)
-                    val.push_back(v[i]);
+};
+
+// Bottom-Up
+class Solution {
+    bool isOperator(char ch) {
+        return (ch == '+' || ch == '-' || ch == '*');
+    }
+public:
+    vector<int> diffWaysToCompute(string expression) {
+        int n = expression.size();
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(n));
+        // Function to check if given substring of expression is a valid expression
+        auto isValidExpression = [&](int i, int j) -> bool {
+            return (i == 0 || isOperator(expression[i - 1])) && (j == n - 1 || isOperator(expression[j + 1]));
+        };
+        // get answer for all single digit numbers
+        for(int i = 0; i < n; i++) {
+            if(isValidExpression(i, i)) {
+                dp[i][i] = { stoi(expression.substr(i, 1)) };
             }
         }
-        // Memoize the result
-        memo[subexpr] = val;
-        return val;
-    }
-    bool checkNoOp(string s) {
-        for (int i = 0; i < s.length(); i++) {
-            if (s[i] == '+' || s[i] == '-' || s[i] == '*' || s[i] == '/')
-                return false;
-        }
-        return true;
-    }
-    vector<int> findValue(vector<int> l, vector<int> r, char op) {
-        vector<int> v;
-        for (int i = 0; i < l.size(); i++) {
-            for (int j = 0; j < r.size(); j++) {
-                if (op == '+')
-                    v.push_back(l[i] + r[j]);
-                else if (op == '-')
-                    v.push_back(l[i] - r[j]);
-                else if (op == '*')
-                    v.push_back(l[i] * r[j]);
-                else if (op == '/')
-                    v.push_back(l[i] / r[j]);
+        // get answer for all 2 digit numbers
+        for(int i = 0, j = 1; j < n; i++, j++) {
+            if(isValidExpression(i, j)) {
+                dp[i][j] = { stoi(expression.substr(i, 2)) };
             }
         }
-        return v;
+        // get answer for all valid expression substrings in bottom up manner
+        for(int len = 3; len <= n; len++) {
+            for(int i = 0, j = i + len - 1; j < n; i++, j++) {
+                if(!isValidExpression(i, j))
+                    continue;
+                // Try to evaluate every operator
+                for(int ind = i; ind <= j; ind++) {
+                    if(isOperator(expression[ind])) {
+                        char op = expression[ind];
+                        // if char at ind is operator get all results for its left and right substring
+                        vector<int> left = dp[i][ind - 1];
+                        vector<int> right = dp[ind + 1][j];
+                        // try all options for left & right operand and push all results to the answer
+                        for(int l : left) {
+                            for(int r : right) {
+                                if(op == '+') {
+                                    dp[i][j].push_back(l + r);
+                                }
+                                else if(op == '-') {
+                                    dp[i][j].push_back(l - r);
+                                }
+                                else if(op == '*') {
+                                    dp[i][j].push_back(l * r);
+                                }
+                            }
+                        }
+                    }
+                }         
+            }
+        }
+        return dp[0][n - 1];
     }
 };
