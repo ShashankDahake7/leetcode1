@@ -1,0 +1,113 @@
+// Recursion
+class Solution {
+public:
+    int solve(int i, int n, vector<int>& nums) {
+        if (i > n) {
+            return 0;
+        }
+        int pick = nums[i] + solve(i + 2, n, nums);
+        int notPick = solve(i + 1, n, nums);
+        return max(pick, notPick);
+    }
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if (n == 1) {
+            return nums[0];
+        }
+        if (n == 2) {
+            return max(nums[0], nums[1]);
+        }
+        int index1 = solve(0, n - 2, nums);
+        int index2 = solve(1, n - 1, nums);
+        return max(index1, index2);
+    }
+};
+
+// Top-Down
+class Solution {
+public:
+    int solve(int i, int n, vector<int>& nums, vector<int>& dp) {
+        if (i > n) {
+            return 0;
+        }
+        if (dp[i] != -1) {
+            return dp[i];
+        }
+        int pick = nums[i] + solve(i + 2, n, nums, dp);
+        int notPick = solve(i + 1, n, nums, dp);
+        return dp[i] = max(pick, notPick);
+    }
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if (n == 1) {
+            return nums[0];
+        }
+        if (n == 2) {
+            return max(nums[0], nums[1]);
+        }
+        vector<int> dp1(n, -1);
+        int index1 = solve(0, n - 2, nums, dp1);
+        vector<int> dp2(n, -1);
+        int index2 = solve(1, n - 1, nums, dp2);
+        return max(index1, index2);
+    }
+};
+
+// Bottom-Up
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if (n == 1) {
+            return nums[0];
+        }
+        if (n == 2) {
+            return max(nums[0], nums[1]);
+        }
+        vector<int> dp(n + 1, 0);
+        for (int i = 1; i <= n - 1; i++) {
+            int pick = dp[i - 1];
+            int notPick = nums[i - 1] + ((i - 2 >= 0) ? dp[i - 2] : 0);
+            dp[i] = max(pick, notPick);
+        }
+        int res1 = dp[n - 1];
+        dp.clear();
+        dp[0] = 0;
+        dp[1] = 0;
+        for (int i = 2; i <= n; i++) {
+            int pick = dp[i - 1];
+            int notPick = nums[i - 1] + ((i - 2 >= 0) ? dp[i - 2] : 0);
+            dp[i] = max(pick, notPick);
+        }
+        int res2 = dp[n];
+        return max(res1, res2);
+    }
+};
+
+// Space Optimized
+class Solution {
+public:
+    int solve(int i, int n, vector<int>& nums) {
+        int prevPrev = 0, prev = 0;
+        for(int k = i; k <= n; k++){
+            int pick = nums[k] + prevPrev;
+            int notPick = prev;
+            int ans = max(pick, notPick);
+            prevPrev = prev;
+            prev = ans;
+        }
+        return prev;
+    }
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if (n == 1) {
+            return nums[0];
+        }
+        if (n == 2) {
+            return max(nums[0], nums[1]);
+        }
+        int index1 = solve(0, n - 2, nums);
+        int indexn = solve(1, n - 1, nums);
+        return max(index1, indexn);
+    }
+};
