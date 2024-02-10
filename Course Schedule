@@ -1,0 +1,65 @@
+// Method-1
+class Solution {
+public:
+    bool canFinish(int n, vector<vector<int>>& pr) {
+        vector<vector<int>> adj(n);
+        vector<int> inedge(n, 0);
+        for (int i = 0; i < pr.size(); i++) {
+            adj[pr[i][0]].push_back(pr[i][1]);
+            inedge[pr[i][1]]++;
+        }
+        queue<int> q;
+        int count = 0;
+        for (int i = 0; i < inedge.size(); i++) {
+            if (inedge[i] == 0) {
+                q.push(i);
+            }
+        }
+        while (!q.empty()) {
+            int curr = q.front();
+            q.pop();
+            count++;
+            for (auto a : adj[curr]) {
+                inedge[a]--;
+                if (inedge[a] == 0) {
+                    q.push(a);
+                }
+            }
+        }
+        return count == n;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    bool iscycle(vector<int> adj[], vector<int>& vis, int id) {
+        if (vis[id] == 1) {
+            return true;
+        }
+        if (vis[id] == 0) {
+            vis[id] = 1; // mark the current node as visited(in process)
+            // recursively check for cycles in the adjacent nodes
+            for (auto edge : adj[id]) {
+                if (iscycle(adj, vis, edge)) {
+                    return true;
+                }
+            }
+        }
+        vis[id] = 2; // mark the current node as visited(processed)
+        return false;
+    }
+    bool canFinish(int n, vector<vector<int>>& pre) {
+        vector<int> adj[n];
+        for (auto edge : pre) {
+            adj[edge[1]].push_back(edge[0]);
+        }
+        vector<int> vis(n, 0);
+        for (int i = 0; i < n; i++) {
+            if (iscycle(adj, vis, i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
