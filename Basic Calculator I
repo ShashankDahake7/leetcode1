@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int calculate(string s) {
+        int num = 0;
+        // pushback anything at the end to handle edge cases.
+        s.push_back('$');
+        char op = '+';
+        stack<int> st;
+        for (char i : s) {
+            if (i == ' ') {
+                continue;
+            }
+            if (isdigit(i)) {
+                num = num * 10 + (i - '0');
+            }
+            else {
+                if (op == '/' || op == '*') {
+                    int a = st.top();
+                    st.pop();
+                    if (op == '/')
+                        st.push(a / num);
+                    else
+                        st.push(a * num);
+                } 
+                else {
+                    if (op == '-')
+                        st.push(-num);
+                    else
+                        st.push(num);
+                }
+                num = 0;
+                op = i;
+            }
+        }
+        num = 0;
+        while (!st.empty()) {
+            num += st.top();
+            st.pop();
+        }
+        return num;
+    }
+};
