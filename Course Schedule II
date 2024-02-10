@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& pre) {
+        // created the adj matrix
+        vector<vector<int>> adj_matrix(numCourses, vector<int>(numCourses, 0));
+        // bi-->ai
+        for (int i = 0; i < pre.size(); i++) {
+            adj_matrix[pre[i][1]][pre[i][0]] = 1;
+        }
+        // we have prepared the adj matrix all we have to do is now find the toplogical sorting of the graph
+        // if there exist any
+        stack<int> topo_ordering;
+        vector<int> indegree(numCourses, 0);
+        // find all the nodes indegree or in other words number of dependencies they have
+        for (int i = 0; i < numCourses; i++) {
+            for (int j = 0; j < numCourses; j++) {
+                // i--j means i must be come before j then j has a dependency
+                if (adj_matrix[i][j])
+                    indegree[j]++;
+            }
+        }
+        // now if there are any nodes with indegree 0 they are free from dependencies they can come in any order
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0)
+                topo_ordering.push(i);
+        }
+        vector<int> ans;
+        // say if there are no such nodes dependency free then there is no ordering
+        while (!topo_ordering.empty() ) {
+            int temp = topo_ordering.top();
+            topo_ordering.pop();
+            ans.push_back(temp);
+            for (int i = 0; i < numCourses; i++) {
+                if (adj_matrix[temp][i]) {
+                    indegree[i]--;
+                    if (indegree[i] == 0) {
+                        topo_ordering.push(i);
+                    }
+                }
+            }
+        }
+        if (ans.size() != numCourses)
+            return {};
+        return ans;
+    }
+};
