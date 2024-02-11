@@ -1,3 +1,67 @@
+// Recursion
+class Solution {
+public:
+    int solve(int i, int j, int n, vector<vector<int>>& matrix) {
+        if (i == n - 1) {
+            return matrix[i][j];
+        }
+        int sum = matrix[i][j];
+        int minSum = INT_MAX;
+        if ((i + 1 < n) && (j - 1 >= 0)) {
+            minSum = min(sum + solve(i + 1, j - 1, n, matrix), minSum);
+        }
+        if (i + 1 < n) {
+            minSum = min(sum + solve(i + 1, j, n, matrix), minSum);
+        }
+        if ((i + 1 < n) && (j + 1 < n)) {
+            minSum = min(sum + solve(i + 1, j + 1, n, matrix), minSum);
+        }
+        return minSum;
+    }
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        int minSum = INT_MAX;
+        int row = 0;
+        for (int col = 0; col < n; col++) {
+            minSum = min(solve(row, col, n, matrix), minSum);
+        }
+        return minSum;
+    }
+};
+
+// Recursion + Memoization
+class Solution {
+public:
+    int solve(int i, int j, int n, vector<vector<int>>& matrix,
+              vector<vector<int>>& dp) {
+        if (i == n - 1) {
+            return matrix[i][j];
+        }
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
+        int sum = matrix[i][j];
+        int minSum = INT_MAX;
+        for (int shift = -1; shift <= 1; shift++) {
+            if ((i + 1 < n) && (j + shift < n) && (j + shift >= 0)) {
+                minSum = min(sum + solve(i + 1, j + shift, n, matrix, dp), minSum);
+            }
+        }
+        return dp[i][j] = minSum;
+    }
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+        int minSum = INT_MAX;
+        int row = 0;
+        for (int col = 0; col < n; col++) {
+            minSum = min(solve(row, col, n, matrix, dp), minSum);
+        }
+        return minSum;
+    }
+};
+
+// Method-3
 class Solution {
 public:
     int minFallingPathSum(vector<vector<int>>& matrix) {
@@ -11,11 +75,19 @@ public:
             for (int j = 0; j < m; j++) {
                 int up = matrix[i][j] + prev[j];
                 int leftDiagonal = matrix[i][j];
-                if (j - 1 >= 0) leftDiagonal += prev[j - 1];
-                else leftDiagonal += 1e9;
+                if (j - 1 >= 0) {
+                    leftDiagonal += prev[j - 1];
+                }
+                else {
+                    leftDiagonal += 1e9;
+                }
                 int rightDiagonal = matrix[i][j];
-                if (j + 1 < m) rightDiagonal += prev[j + 1];
-                else rightDiagonal += 1e9;
+                if (j + 1 < m) {
+                    rightDiagonal += prev[j + 1];
+                }
+                else {
+                    rightDiagonal += 1e9;
+                }
                 cur[j] = min(up, min(leftDiagonal, rightDiagonal));
             }
             prev = cur;
