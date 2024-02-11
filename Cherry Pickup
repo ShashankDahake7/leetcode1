@@ -1,0 +1,58 @@
+// Method-1
+class Solution {
+public:
+    int solve(int r1, int c1, int c2, vector<vector<int>>& grid) {
+        int r2 = r1 + c1 - c2;
+        if (r1 < 0 || r2 < 0 || c1 < 0 || c2 < 0 || grid[r1][c1] == -1 || grid[r2][c2] == -1) {
+            return INT_MIN;
+        }
+        if (r1 == 0 && c1 == 0 && r2 == 0 && c2 == 0) {
+            return grid[r1][c1];
+        }
+        int case1 = solve(r1, c1 - 1, c2, grid);
+        int case2 = solve(r1, c1 - 1, c2 - 1, grid);
+        int case3 = solve(r1 - 1, c1, c2 - 1, grid);
+        int case4 = solve(r1 - 1, c1, c2, grid);
+        int maxi = max(max(case1, case2), max(case3, case4));
+        int cost = (c1 == c2) ? (grid[r1][c1]) : (grid[r1][c1] + grid[r2][c2]);
+        return maxi + cost;
+    }
+    int cherryPickup(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int ans = solve(n - 1, n - 1, n - 1, grid);
+        if (ans < 0) {
+            return 0;
+        }
+        return ans;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int solve(int r1, int c1, int c2, vector<vector<int>>& grid, vector<vector<vector<int>>>& dp) {
+        int r2 = r1 + c1 - c2;
+        if (r1 < 0 || r2 < 0 || c1 < 0 || c2 < 0 || grid[r1][c1] == -1 || grid[r2][c2] == -1) {
+            return INT_MIN;
+        }
+        if (r1 == 0 && c1 == 0 && r2 == 0 && c2 == 0) {
+            return grid[r1][c1];
+        }
+        int case1 = solve(r1, c1 - 1, c2, grid, dp);
+        int case2 = solve(r1, c1 - 1, c2 - 1, grid, dp);
+        int case3 = solve(r1 - 1, c1, c2 - 1, grid, dp);
+        int case4 = solve(r1 - 1, c1, c2, grid, dp);
+        int maxi = max(max(case1, case2), max(case3, case4));
+        int cost = (c1 == c2) ? (grid[r1][c1]) : (grid[r1][c1] + grid[r2][c2]);
+        return maxi + cost;
+    }
+    int cherryPickup(vector<vector<int>>& grid) {
+        int n = grid.size();
+        vector<vector<vector<int>>> dp(n,vector<vector<int>> (n, vector<int> (n,-1)));
+        int ans = solve(n - 1, n - 1, n - 1, grid, dp);
+        if (ans < 0) {
+            return 0;
+        }
+        return ans;
+    }
+};
