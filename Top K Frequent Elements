@@ -1,0 +1,82 @@
+// Method-1
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> v, ans;
+        vector<pair<int, int>> v1;
+        unordered_map<int, int> mp;
+        for (int i = 0; i < nums.size(); i++) {
+            mp[nums[i]]++;
+        }
+        for (auto x : mp) {
+            v1.push_back(make_pair(x.second, x.first));
+        }
+        sort(v1.begin(), v1.end());
+        for (auto it = v1.rbegin(); it != v1.rend(); it++) {
+            v.push_back(it->second);
+        }
+        for (int i = 0; i < k; i++) {
+            ans.push_back(v[i]);
+        }
+        return ans;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    typedef pair<int, int> P;
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        int n = nums.size();
+        unordered_map<int, int> mp;
+        for(auto &i : nums){
+            mp[i]++;
+        }
+        priority_queue<P, vector<P>, greater<P>> pq;
+        for(auto &it : mp){
+            int value = it.first;
+            int freq = it.second;
+            pq.push({freq, value});
+            if(pq.size() > k){
+                pq.pop();
+            }
+        }
+        vector<int> ans;
+        while(!pq.empty()){
+            ans.push_back(pq.top().second);
+            pq.pop();
+        }
+        return ans;
+    }
+};
+
+// Method-3
+class Solution {
+public:
+    typedef pair<int, int> P;
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        int n = nums.size();
+        unordered_map<int, int> mp;
+        for(auto &i : nums){
+            mp[i]++;
+        }
+        vector<vector<int>> bucket(n + 1);
+        for(auto &it : mp){
+            int value = it.first;
+            int freq = it.second;
+            bucket[freq].push_back(value);
+        }
+        vector<int> ans;
+        for(int i = n; i >= 0; i--){
+            if(bucket[i].size() == 0){
+                continue;
+            }
+            while(bucket[i].size() > 0 && k > 0){
+                ans.push_back(bucket[i].back());
+                bucket[i].pop_back();;
+                k--;
+            }
+        }
+        return ans;
+    }
+};
