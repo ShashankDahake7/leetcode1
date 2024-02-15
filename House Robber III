@@ -1,0 +1,32 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+struct RobbedRoot{
+    int robbedRoot;
+    int skippedRoot; 
+};
+class Solution {
+public:
+    RobbedRoot robDfs(TreeNode* root){
+        if(root == NULL){
+            return RobbedRoot{0, 0};
+        }
+        RobbedRoot robLeft = robDfs(root->left);
+        RobbedRoot robRight = robDfs(root->right);
+        int robThisNode = root->val + robLeft.skippedRoot + robRight.skippedRoot;
+        int skipThisNode = max(robLeft.robbedRoot, robLeft.skippedRoot) + max(robRight.skippedRoot, robRight.robbedRoot);
+        return RobbedRoot{robThisNode, skipThisNode};
+    }
+    int rob(TreeNode* root) {
+        RobbedRoot ans = robDfs(root);
+        return max(ans.robbedRoot, ans.skippedRoot);
+    }
+};
