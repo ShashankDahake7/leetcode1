@@ -1,0 +1,56 @@
+// Method-1
+class Solution {
+public:
+    int solve(int a, int b) {
+        // base case
+        if (b == 0) {
+            return 1;
+        }
+        // calculate the current solution
+        int temp = solve(a, b / 2);
+        // if power is even then we just divided the power by 2 above and
+        // calculated the values else we just need to multiply an extra factor
+        // of a % 1337 that will cover up the solution
+        if (b % 2 == 0) {
+            return ((temp % 1337) * temp % 1337) % 1337;
+        }
+        else {
+            return (a % 1337 * ((temp % 1337 * temp % 1337) % 1337)) % 1337;
+        }
+    }
+    int superPow(int a, vector<int>& b) {
+        // base case when size of vector is zero
+        if (b.size() == 0) {
+            return 1;
+        }
+        // maintain a variable to store the last element of the vector at the current state
+        int x = b.back();
+        // pop it once stored
+        b.pop_back();
+        // we popped because once stored we can mutliply the value and call for further recursion
+        return solve(superPow(a, b), 10) * solve(a, x) % 1337;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int superPow(int a, vector<int>& b) {
+        long long c = 0;
+        for (auto i : b) {
+            c = ((10 * c) + i) % 1140;
+            if (c == 0) {
+                c += 1140;
+            }
+        }
+        long long res = 1;
+        while (c > 0) {
+            if (c & 1) {
+                res = (res * 1ll * a) % 1337;
+            }
+            a = (a * 1ll * a) % 1337;
+            c >>= 1;
+        }
+        return res;
+    }
+};
