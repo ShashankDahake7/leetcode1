@@ -35,6 +35,6 @@ public:
             F += sum - n * nums[i];
             gSum = max(gSum, F);
         }
-        return gsum;
+        return gSum;
     }
 };
