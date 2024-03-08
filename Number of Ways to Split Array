@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int waysToSplitArray(vector<int>& nums) {
+        int n = nums.size();
+        int count = 0;
+        long long rSum = 0, lSum = 0;
+        for(int i = 0; i < n; i++){
+            rSum += nums[i];
+        }
+        for(int i = 0; i < n - 1; i++){
+            lSum += nums[i];
+            rSum -= nums[i];
+            if(lSum >= rSum){
+                count++;
+            }
+        }
+        return count;
+    }
+};
