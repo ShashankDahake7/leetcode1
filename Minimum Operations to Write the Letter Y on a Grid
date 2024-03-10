@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int getOperationCount(vector<vector<int>> grid, int y, int notY) {
+        int ans = 0, n = grid.size();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if ((i <= n / 2 && (i == j || i + j == n - 1)) || (i > n / 2 && j == n / 2)) {
+                    if (y != grid[i][j]) {
+                        ans++;
+                    }
+                } 
+                else {
+                    if (notY != grid[i][j]) {
+                        ans++;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+    int minimumOperationsToWriteY(vector<vector<int>> grid) {
+        int ans = INT_MAX;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (i != j)
+                    ans = min(ans, getOperationCount(grid, i, j));
+            }
+        }
+        return ans;
+    }
+};
