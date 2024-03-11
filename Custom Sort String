@@ -1,0 +1,25 @@
+class Solution {
+public:
+    string customSortString(string order, string s) {
+        int mp[26] = {0};
+        string s1 = "", s2 = "";
+        for(auto i : order){
+            mp[i - 'a']++;
+        }
+        for(auto i : s){
+            if(mp[i - 'a'] == 0){
+                s2 += i;
+            }
+            else{
+                mp[i - 'a']++;
+            }
+        }
+        for(auto i : order){
+            while(mp[i - 'a'] > 1){
+                s1 += i;
+                mp[i - 'a']--;
+            }
+        }
+        return s1 + s2;
+    }
+};
