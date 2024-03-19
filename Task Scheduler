@@ -1,0 +1,60 @@
+// Method-1
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        vector<int> mp(26, 0);
+        for(auto i : tasks){
+            mp[i - 'A']++;
+        }
+        int time = 0;
+        priority_queue<int> pq;
+        for(int i = 0; i < 26; i++){
+            if(mp[i] > 0){
+                pq.push(mp[i]);
+            }
+        }
+        while(!pq.empty()){
+            vector<int> temp;
+            for(int i = 1; i <= n + 1; i++){
+                if(!pq.empty()){
+                    int freq = pq.top();
+                    pq.pop();
+                    freq--;
+                    temp.push_back(freq);
+                }
+            }
+            for(int i : temp){  
+                if(i > 0){
+                    pq.push(i);
+                }
+            }
+            if(pq.empty()){
+                time += temp.size();
+            }
+            else{
+                time += n + 1;
+            }
+        }
+        return time;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        vector<int> mp(26, 0);
+        int maxi = 1;
+        for (auto& ch : tasks) {
+            mp[ch - 'A']++;
+            maxi = max(maxi, mp[ch - 'A']);
+        }
+        int maxcnt = 0;
+        for (int& x : mp){
+            if (maxi == x) {
+                maxcnt++;
+            }
+        }
+        return max((int)tasks.size(), ((n + 1) * (maxi - 1) + maxcnt));
+    }
+};
