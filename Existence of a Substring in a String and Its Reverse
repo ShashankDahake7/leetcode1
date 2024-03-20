@@ -1,0 +1,40 @@
+// Method-1
+class Solution {
+public:
+    bool isSubstringPresent(string s) {
+        int n = s.size();
+        unordered_map<string, int> mp;
+        for (int i = 0; i < n - 1; i++) {
+            string sub = "";
+            sub += s[i];
+            sub += s[i + 1];
+            mp[sub]++;
+        }
+        reverse(s.begin(), s.end());
+        for (int i = 0; i < n - 1; i++) {
+            string sub = "";
+            sub += s[i];
+            sub += s[i + 1];
+            if (mp.find(sub) != mp.end())
+                return true;
+        }
+        return false;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+    bool isSubstringPresent(string s) {
+        int n = s.size();
+        string r = s;
+        reverse(r.begin(), r.end());
+        for (int i = 0; i < n - 1; i++) {
+            string tmp = s.substr(i, 2);
+            if (r.find(tmp) != -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
