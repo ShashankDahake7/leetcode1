@@ -1,0 +1,35 @@
+class Solution {
+public:
+    bool isPossibleDivide(vector<int>& nums, int k) {
+        int n = nums.size();
+        if(n % k != 0){
+            return false;
+        }
+        map<int, priority_queue<int, vector<int>, greater<int>>> mp;
+        sort(nums.begin(), nums.end());
+        vector<bool> vis(n);
+        for(int i = 0; i < n; i++){
+            mp[nums[i]].push(i);
+        }
+        for(int i = 0; i < n; i++){
+            if(!vis[i]){
+                for(int j = 0; j < k; j++){
+                    int curr = nums[i] + j;
+                    if(j == k - 1){
+                        vis[mp[curr].top()] = true;
+                        mp[curr].pop();
+                        break;
+                    }
+                    if(mp[curr + 1].empty()){
+                        return false;
+                    }
+                    else{
+                        vis[mp[curr].top()] = true;
+                        mp[curr].pop();
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
