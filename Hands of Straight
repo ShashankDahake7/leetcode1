@@ -1,0 +1,35 @@
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int groupSize) {
+        int n = hand.size();
+        if (n % groupSize != 0) {
+            return false;
+        }
+        map<int, priority_queue<int, vector<int>, greater<int>>> mp;
+        sort(hand.begin(), hand.end());
+        vector<bool> vis(n);
+        for (int i = 0; i < n; i++){
+            mp[hand[i]].push(i);
+        }
+        for(int i = 0; i < n; i++){
+            if(!vis[i]){
+                for(int j = 0; j < groupSize; j++){
+                    int currCard = hand[i] + j;
+                    if(j == groupSize - 1){
+                        vis[mp[currCard].top()] = true;
+                        mp[currCard].pop();
+                        break;
+                    }
+                    if(mp[currCard + 1].empty()){
+                        return false;
+                    }
+                    else{
+                        vis[mp[currCard].top()] = true;
+                        mp[currCard].pop();
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
