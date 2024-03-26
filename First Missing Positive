@@ -1,0 +1,40 @@
+// Method-1
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& a) {
+        unordered_map<int, int> map;
+        int i, j, k, c = 0;
+        for (auto x : a) {
+            if (x > 0)
+                map[x]++;
+        }
+        for (i = 1; i < a.size() + 1; i++) {
+            if (map.find(i) == map.end())
+                return i;
+        }
+        return a.size() + 1;
+    }
+};
+
+// Method-2
+class Solution {
+public:
+
+    int firstMissingPositive(vector<int>& nums) {
+        int n = nums.size();
+        for (auto& num : nums) {
+            if (num <= 0)
+                num = n + 1;
+        }
+        for (auto& num : nums) {
+            int index = abs(num) - 1;
+            if (index < n)
+                nums[index] = -abs(nums[index]);
+        }
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > 0)
+                return (i + 1);
+        }
+        return (n + 1);
+    }
+};
