@@ -1,0 +1,45 @@
+// Method-1
+class Solution {
+public:
+    long long countSubarrays(vector<int>& nums, int k) {
+        int n = nums.size();
+        int maxi = 0;
+        for (auto i : nums) {
+            maxi = max(i, maxi);
+        }
+        int i = 0, j = 0;
+        long long count = 0;
+        unordered_map<int, int> mp;
+        while (i < n) {
+            mp[nums[i]]++;
+            while (mp[maxi] >= k) {
+                mp[nums[j]]--;
+                count += (n - 1) - i + 1;
+                j++;
+            }class Solution {
+public:
+    long long countSubarrays(vector<int>& nums, int k) {
+        long long int max_num = *max_element(nums.begin(), nums.end());
+        long long count = 0;
+        long long int left = 0, right = 0, ans = 0;
+        while (right < nums.size() || left > right) {
+            if (nums[right] == max_num)
+                count++;
+           while (count >= k) {
+                if (nums[left] == max_num)
+                    count--;
+                left++;
+                ans += nums.size() - right;
+            }
+            right++;
+        }
+        return ans;
+    }
+};
+            i++;
+        }
+        return count;
+    }
+};
+
+// Method-2
