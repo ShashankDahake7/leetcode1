@@ -1,0 +1,42 @@
+// Method-1
+class Solution {
+public:
+    long long countSubarrays(vector<int>& nums, int minK, int maxK) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        long long ans =0;
+        for(int i=0; i<n; i++){
+             for(int j =i; j<n; j++){
+                 if(nums[i] == minK && nums[j] == maxK)
+                     ans++;
+             }
+         }
+         return ans;
+     }
+};
+
+// Method-2
+class Solution {
+public:
+    long long countSubarrays(vector<int>& nums, int minK, int maxK) {
+        int n = nums.size();
+        int maxi = -1, mini = -1;
+        int left = 0;
+        long long ans = 0;
+        for(int right = 0; right < n; right++){
+            int c = nums[right];
+            if(c < minK || c > maxK){
+                left = right + 1;
+                continue;
+            }
+            if(c == maxK){
+                maxi = right;
+            }
+            if(c == minK){
+                mini = right;
+            }
+            ans += max((min(maxi, mini) - left + 1), 0);
+        }
+        return ans;
+    }
+};
